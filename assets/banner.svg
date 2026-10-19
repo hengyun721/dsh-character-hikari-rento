@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320" role="img" aria-label="dsh-character-hikari-rento">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a1420"/>
+      <stop offset="55%" stop-color="#43203a"/>
+      <stop offset="100%" stop-color="#1d1224"/>
+    </linearGradient>
+    <linearGradient id="sakura" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd7e6"/>
+      <stop offset="100%" stop-color="#ff7fb0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#ff8ab5" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ff8ab5" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="320" fill="url(#bg)"/>
+  <circle cx="1112" cy="86" r="196" fill="url(#glow)"/>
+
+  <!-- petals -->
+  <g fill="url(#sakura)" opacity="0.85">
+    <ellipse cx="1110" cy="70" rx="16" ry="42" transform="rotate(-22 1110 70)"/>
+    <ellipse cx="1160" cy="96" rx="14" ry="36" transform="rotate(28 1160 96)"/>
+    <ellipse cx="1188" cy="196" rx="18" ry="46" transform="rotate(-12 1188 196)"/>
+    <ellipse cx="1096" cy="214" rx="13" ry="34" transform="rotate(38 1096 214)"/>
+    <ellipse cx="1218" cy="286" rx="12" ry="30" transform="rotate(-34 1218 286)"/>
+  </g>
+
+  <g font-family="'Segoe UI','Noto Sans SC','Microsoft YaHei',sans-serif">
+    <text x="88" y="132" font-size="64" font-weight="700" fill="#ffe6f0" letter-spacing="2">恋兔光 · 角色模仿</text>
+    <text x="90" y="186" font-size="26" fill="#ffb3cf" letter-spacing="6">dsh-character-hikari-rento</text>
+    <text x="90" y="238" font-size="21" fill="#e6d3dd" opacity="0.9">把《这里是，终末停滞委员会。》的恋兔光装进 DeepSeek Harness</text>
+    <text x="90" y="272" font-size="18" fill="#b79aa8" opacity="0.85">bundle plugin · agent preset · references on demand</text>
+  </g>
+
+  <rect x="0" y="312" width="1280" height="8" fill="url(#sakura)" opacity="0.75"/>
+</svg>

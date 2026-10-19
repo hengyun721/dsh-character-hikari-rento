@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build / packaging leftovers
+*.tgz
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local experiments
+*.local.json
+*.bak
