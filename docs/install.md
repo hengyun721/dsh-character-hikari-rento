@@ -13,15 +13,15 @@
 ## 方式一：npm
 
 ```bash
-npm i dsh-character-hikari-rento
+npm i hikari-rento
 ```
 
-然后在 DSH 里 **设置 → 插件 → 安装** `dsh-character-hikari-rento@latest`，**重启客户端**。
+然后在 DSH 里 **设置 → 插件 → 安装** `hikari-rento@latest`，**重启客户端**。
 
 ## 方式二：本地目录
 
 ```bash
-git clone https://github.com/hengyun721/dsh-character-hikari-rento.git
+git clone https://github.com/hengyun721/hikari-rento.git
 ```
 
 **设置 → 插件 → 安装本地 bundle**，指向克隆出来的目录（绝对路径）。
@@ -29,10 +29,10 @@ git clone https://github.com/hengyun721/dsh-character-hikari-rento.git
 ## 方式三：从源码自己打
 
 ```bash
-git clone https://github.com/hengyun721/dsh-character-hikari-rento.git
-cd dsh-character-hikari-rento
+git clone https://github.com/hengyun721/hikari-rento.git
+cd hikari-rento
 npm run verify        # 先确认生成物与自检全绿
-npm pack              # 产出 dsh-character-hikari-rento-2.0.0.tgz
+npm pack              # 产出 hikari-rento-2.0.0.tgz
 ```
 
 装 tgz 与装本地目录等价；`files[]` 已经列清楚会打进包里的一切。
@@ -53,7 +53,7 @@ npm pack              # 产出 dsh-character-hikari-rento-2.0.0.tgz
 | 从 | 到 | 要做的事 |
 |---|---|---|
 | 2.x | 2.x | 直接装新版，重启，开新会话 |
-| 1.x | 2.x | 包名变了（`@local/...` → `dsh-character-hikari-rento`）。先移除旧 bundle，再装新的；旧 profile 里若还留着 `@local/...` 那一行，让插件管理器重装/同步一次 |
+| 1.x | 2.x | 包名变了（`@local/...` → `hikari-rento`）。先移除旧 bundle，再装新的；旧 profile 里若还留着 `@local/...` 那一行，让插件管理器重装/同步一次 |
 | 任意 | 任意 | **不要**手写 `$DSH_HOME/profiles/<profile>/package.json`，也不要在 profile 目录里跑 pnpm —— 那些步骤由插件管理器负责 |
 
 ## 卸载

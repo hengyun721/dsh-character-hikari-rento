@@ -15,7 +15,7 @@
  * 路由说明，告诉她在哪四类问题上该去读哪一份参考档；路径由 import.meta.url 在
  * 加载时算出来，所以插件装到哪个目录都成立。
  *
- * @module dsh-character-hikari-rento
+ * @module hikari-rento
  */
 import z from '@deepseek-ai/schemastery';
 import { fileURLToPath } from 'node:url';

@@ -6,8 +6,8 @@
 - 角色、世界观与台词的权利归原作作者与出版方所有（原作：《这里是，终末停滞委员会。》第1～6卷（中文版））。
 - 中文版为民间汉化，**译者：明日风等**。
 - `SKILL.md` 与 `references/` 是二次创作的摘要与整理，非商业用途。
-- 技能包里的 MIT 许可（`LICENSE`）只覆盖插件与打包代码，不覆盖角色素材。
+- 技能包里的 MIT 许可（`LICENSE`）只覆盖打包代码，不覆盖角色素材。
 
 若权利人认为内容越界，请联系维护者，相关文本会在确认后移除。
 
-版本 2.1.0 · 源码与完整说明：https://github.com/hengyun721/dsh-character-hikari-rento#readme
+版本 1.0.0 · 源码与完整说明：https://github.com/hengyun721/hikari-rento

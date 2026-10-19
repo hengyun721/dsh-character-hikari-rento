@@ -4,7 +4,7 @@
 #   1. 插入一个 agent preset：
 #        character-standard —— 插件清单与官方 standard preset 完全一致（全套工具），
 #                              只把人设换成恋兔光，并启用「档案调用」路由（detail: full）。
-#   2. 在 preset 里挂载本包的 index.js（dsh-character-hikari-rento），
+#   2. 在 preset 里挂载本包的 index.js（hikari-rento），
 #      它把 character.json 里的人设段落注册为该 preset 作用域的
 #      `deployment:persona-prefix`，从而遮蔽部署级人设 —— 会话身份就是恋兔光。
 #
@@ -33,7 +33,7 @@
           # 角色模仿插件：注册 deployment:persona-prefix，会话身份即恋兔光。
           # 不要再挂 @deepseek-ai/dsh-persona，那会与本节重名。
           - id: character-hikari-rento
-            name: 'dsh-character-hikari-rento'
+            name: 'hikari-rento'
             config:
               detail: full
               fewShotEnabled: true

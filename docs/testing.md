@@ -12,9 +12,9 @@ npm run verify
 
 | 命令 | 做什么 |
 |---|---|
-| `npm run build` | `character.json` + 模板 → `index.js` |
-| `npm run check` | 重算并比对 `index.js`（漂移即失败）+ `node --check index.js` |
-| `npm test` | `scripts/self-check.mjs`，50+ 条零依赖结构自检 |
+| `npm run build` | `character.json` → 插件包与技能包的全部产物 |
+| `npm run check` | 重算并逐个比对两个包的产物（漂移即失败） |
+| `npm test` | `scripts/self-check.mjs`，80 条零依赖结构自检 |
 
 ## 自检覆盖什么
 

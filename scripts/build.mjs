@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 /**
- * Regenerate every build artifact from `character.json`:
+ * Regenerate every build artifact from `character.json`.
  *
- *   index.js                              the DSH plugin body (embeds the persona)
- *   skill/hikari-rento/SKILL.md           the portable skill version
- *   skill/hikari-rento/NOTICE.md          attribution that travels with the skill
- *   skill/hikari-rento/LICENSE            MIT, copied from the repo root
- *   skill/hikari-rento/references/*.md    the four reference files, copied
+ * The repository holds one source of truth and two independent packages:
  *
- * `character.json` is the single source of truth. Never hand-edit the outputs.
+ *   character.json, references/            shared source
+ *   packages/plugin/   → npm `hikari-rento`        (DeepSeek Harness bundle)
+ *   packages/skill/    → npm `hikari-rento-skill`  (portable skill)
+ *
+ * Outputs:
+ *   packages/plugin/{index.js,character.json,README.md,NOTICE.md,LICENSE}
+ *   packages/plugin/references/*.md
+ *   packages/skill/{SKILL.md,README.md,NOTICE.md,LICENSE}
+ *   packages/skill/references/*.md
  *
  *     node scripts/build.mjs           # rewrite everything
  *     node scripts/build.mjs --check   # exit 1 when any artifact is stale
@@ -22,10 +26,10 @@ import { fileURLToPath } from 'node:url';
 const ROOT = new URL('../', import.meta.url);
 const CHARACTER_FILE = fileURLToPath(new URL('character.json', ROOT));
 const TEMPLATE_FILE = fileURLToPath(new URL('scripts/index.template.js', ROOT));
-const PACKAGE_FILE = fileURLToPath(new URL('package.json', ROOT));
-const INDEX_FILE = fileURLToPath(new URL('index.js', ROOT));
 const REFERENCES_DIR = new URL('references/', ROOT);
-const SKILL_DIR = new URL('skill/hikari-rento/', ROOT);
+const PLUGIN_DIR = new URL('packages/plugin/', ROOT);
+const SKILL_DIR = new URL('packages/skill/', ROOT);
+const REPO_URL = 'https://github.com/hengyun721/hikari-rento';
 
 /** Section order used by every detail level of the plugin. */
 const ORDER = [
@@ -108,7 +112,7 @@ function renderPlugin(template, character, pkgName) {
 }
 
 /** `SKILL.md`: frontmatter + the same persona sections, with skill-local routing. */
-function renderSkill(character, pkg) {
+function renderSkill(character) {
   const missing = SKILL_SECTIONS.filter((key) => !character.sections?.[key]);
   if (missing.length > 0) throw new Error(`skill is missing section(s): ${missing.join(', ')}`);
 
@@ -164,8 +168,8 @@ ${body}
 `;
 }
 
-/** `NOTICE.md`: attribution that must travel with the packaged skill. */
-function renderSkillNotice(character, pkg) {
+/** `NOTICE.md` for the skill package: attribution that must travel with the zip. */
+function renderSkillNotice(character, version) {
   return `# 素材归属 / NOTICE
 
 本技能把轻小说《这里是，终末停滞委员会。》中的角色 **${character.name}（${character.nameJa}）**
@@ -174,11 +178,88 @@ function renderSkillNotice(character, pkg) {
 - 角色、世界观与台词的权利归原作作者与出版方所有（原作：${character.source}）。
 - 中文版为民间汉化，**译者：明日风等**。
 - \`SKILL.md\` 与 \`references/\` 是二次创作的摘要与整理，非商业用途。
-- 技能包里的 MIT 许可（\`LICENSE\`）只覆盖插件与打包代码，不覆盖角色素材。
+- 技能包里的 MIT 许可（\`LICENSE\`）只覆盖打包代码，不覆盖角色素材。
 
 若权利人认为内容越界，请联系维护者，相关文本会在确认后移除。
 
-版本 ${pkg.version} · 源码与完整说明：${pkg.homepage ?? pkg.repository?.url ?? ''}
+版本 ${version} · 源码与完整说明：${REPO_URL}
+`;
+}
+
+function renderPluginReadme(character, version) {
+  return `# hikari-rento
+
+${character.name}（《这里是，终末停滞委员会。》）的 **DeepSeek Harness 插件**。
+装上之后，新会话里说话的人就是她。
+
+> 这是 monorepo [hikari-rento](${REPO_URL}) 里的**插件包**。
+> 完整说明、配置项、素材归属与姊妹项目（skill 版）见仓库主页。
+
+## 安装
+
+\`\`\`bash
+npm i hikari-rento
+\`\`\`
+
+或在 DSH 里 **设置 → 插件 → 安装本地 bundle**，指向本目录；装完**重启客户端**，
+并且**新建一个会话**（不要在旧会话里切 preset）。
+
+## 配置
+
+\`\`\`yaml
+- id: character-hikari-rento
+  name: 'hikari-rento'
+  config:
+    detail: full              # minimal | standard | full
+    fewShotEnabled: true
+    sectionName: deployment:persona-prefix
+    sectionOrder: 0
+    includeRuntimeContext: true
+\`\`\`
+
+## 这个包里有什么
+
+| 文件 | 作用 |
+|---|---|
+| \`index.js\` | 插件本体（由 \`character.json\` 生成，勿手改） |
+| \`cordis.patch.yml\` | 声明 agent preset 并挂载本插件 |
+| \`character.json\` | 本包内嵌的角色定义副本 |
+| \`references/\` | 按需读取的四份参考档（⚠️ 含剧透） |
+| \`locale/\`、\`icon.svg\` | 插件卡片的显示名与图标 |
+
+MIT · 版本 ${version} · 同人企划，素材归属见 [NOTICE.md](${REPO_URL}/blob/main/packages/plugin/NOTICE.md)
+`;
+}
+
+function renderSkillReadme(character, version) {
+  return `# hikari-rento-skill
+
+${character.name}（《这里是，终末停滞委员会。》）的 **角色扮演技能**（skill）。
+给不跑 DeepSeek Harness 的 agent 用：Claude Code、Codex、WorkBuddy 之类。
+
+> 这是 monorepo [hikari-rento](${REPO_URL}) 里的**技能包**。
+> 姊妹项目：[hikari-rento](${REPO_URL}/tree/main/packages/plugin)（DSH 插件）。
+
+## 安装
+
+把本目录整个放进宿主的 skills 目录（用户级 \`~/.<agent>/skills/\` 或项目级 \`./.skills/\`），
+或者解开 Release 里的 \`hikari-rento-skill-<version>.tgz\`：
+
+\`\`\`bash
+tar -xzf hikari-rento-skill-${version}.tgz -C ~/.claude/skills/
+\`\`\`
+
+然后新开一个会话，说「恋兔光模式」试一句。
+
+## 内容
+
+| 文件 | 作用 |
+|---|---|
+| \`SKILL.md\` | frontmatter + 人设正文（生成物，勿手改） |
+| \`references/\` | 四份参考档 + 索引（⚠️ 含剧透） |
+| \`NOTICE.md\` | 素材归属与译者署名 |
+
+MIT（只覆盖打包代码）· 版本 ${version} · 素材归属见 [NOTICE.md](./NOTICE.md)
 `;
 }
 
@@ -190,22 +271,39 @@ async function listReferences() {
     .sort();
 }
 
-async function collectOutputs(pkg) {
-  const [template, characterRaw, license] = await Promise.all([
+const readJson = async (rel) => JSON.parse(await readFile(fileURLToPath(new URL(rel, ROOT)), 'utf8'));
+
+async function collectOutputs() {
+  const [template, characterRaw, license, notice] = await Promise.all([
     readFile(TEMPLATE_FILE, 'utf8'),
     readFile(CHARACTER_FILE, 'utf8'),
     readFile(new URL('LICENSE', ROOT), 'utf8'),
+    readFile(new URL('NOTICE.md', ROOT), 'utf8'),
   ]);
   const character = JSON.parse(characterRaw);
+  const pluginPkg = await readJson('packages/plugin/package.json');
+  const skillPkg = await readJson('packages/skill/package.json');
 
   const outputs = new Map();
-  outputs.set('index.js', renderPlugin(template, character, pkg.name));
-  outputs.set('skill/hikari-rento/SKILL.md', renderSkill(character, pkg));
-  outputs.set('skill/hikari-rento/NOTICE.md', renderSkillNotice(character, pkg));
-  outputs.set('skill/hikari-rento/LICENSE', license);
 
+  // --- plugin package -----------------------------------------------------
+  outputs.set('packages/plugin/index.js', renderPlugin(template, character, pluginPkg.name));
+  outputs.set('packages/plugin/character.json', `${JSON.stringify(character, null, 2)}\n`);
+  outputs.set('packages/plugin/README.md', renderPluginReadme(character, pluginPkg.version));
+  outputs.set('packages/plugin/NOTICE.md', notice);
+  outputs.set('packages/plugin/LICENSE', license);
+
+  // --- skill package ------------------------------------------------------
+  outputs.set('packages/skill/SKILL.md', renderSkill(character));
+  outputs.set('packages/skill/README.md', renderSkillReadme(character, skillPkg.version));
+  outputs.set('packages/skill/NOTICE.md', renderSkillNotice(character, skillPkg.version));
+  outputs.set('packages/skill/LICENSE', license);
+
+  // --- shared reference files, copied into both packages ------------------
   for (const name of await listReferences()) {
-    outputs.set(`skill/hikari-rento/references/${name}`, await readFile(new URL(name, REFERENCES_DIR), 'utf8'));
+    const text = await readFile(new URL(name, REFERENCES_DIR), 'utf8');
+    outputs.set(`packages/plugin/references/${name}`, text);
+    outputs.set(`packages/skill/references/${name}`, text);
   }
 
   for (const [path, text] of outputs) {
@@ -216,8 +314,7 @@ async function collectOutputs(pkg) {
 
 async function main() {
   const check = process.argv.includes('--check');
-  const pkg = JSON.parse(await readFile(PACKAGE_FILE, 'utf8'));
-  const outputs = await collectOutputs(pkg);
+  const outputs = await collectOutputs();
 
   if (check) {
     const stale = [];
@@ -241,7 +338,6 @@ async function main() {
     bytes += Buffer.byteLength(text, 'utf8');
   }
   console.log(`wrote ${outputs.size} artifacts (${bytes} bytes)`);
-  console.log(`  index.js + skill/hikari-rento/{SKILL.md,NOTICE.md,LICENSE,references/*.md}`);
 }
 
 await main();

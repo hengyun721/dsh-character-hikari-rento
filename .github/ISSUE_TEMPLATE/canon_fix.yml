@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         这类 issue 最有价值，也最容易判错。提交前请先看
-        [`证据与归属说明.md`](https://github.com/hengyun721/dsh-character-hikari-rento/blob/main/%E8%AF%81%E6%8D%AE%E4%B8%8E%E5%BD%92%E5%B1%9E%E8%AF%B4%E6%98%8E.md)：
+        [`证据与归属说明.md`](https://github.com/hengyun721/hikari-rento/blob/main/%E8%AF%81%E6%8D%AE%E4%B8%8E%E5%BD%92%E5%B1%9E%E8%AF%B4%E6%98%8E.md)：
         各卷叙述者会切换，**「台词里出现『我』就是她」是错的**。
   - type: textarea
     id: problem

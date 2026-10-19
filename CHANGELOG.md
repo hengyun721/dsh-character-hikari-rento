@@ -5,13 +5,37 @@
 
 ## [Unreleased]
 
+## [plugin 1.0.0 / skill 1.0.0] — 2026-10-19
+
+**改名 + 拆包：单仓双包，两套 tag。** 早先的 `dsh-character-hikari-rento` 2.x 系列到此为止。
+
+### Changed（breaking）
+
+- 项目改名：`dsh-character-hikari-rento` → `hikari-rento`；npm 包名同步改为 `hikari-rento`
+  与 `hikari-rento-skill`。
+- 拆成 monorepo：`packages/plugin`（DSH 插件）+ `packages/skill`（可移植 skill），
+  共用根目录的 `character.json` 与 `references/`。两个包各自版本、各自 tag、各自 Release。
+- 版本重置：插件 2.1.0 → **1.0.0**，skill 首次独立发行 **1.0.0**。
+- tag 改为两套：`plugin-v*` / `skill-v*`。旧的 `v2.0.0` / `v2.1.0` 保留为历史，不再追加。
+- 安装目标变为 `packages/plugin/`；`cordis.patch.yml` 里挂载的包名改为 `hikari-rento`。
+
+### Added
+
+- `scripts/package-plugin.mjs` 与 `scripts/package-skill.mjs`；`npm run pack` 一次打出两个包。
+- 自检扩到 80 条：两个包的清单、patch、生成产物、参考档副本、README 一致性全覆盖。
+- `packages/*/README.md` 改为生成物，随包版本自动更新。
+
+### Removed
+
+- 根目录不再是可以直接安装的 bundle：`index.js`、`cordis.patch.yml`、`locale/`、`icon.svg`
+  都移进了 `packages/plugin/`。
 ## [2.1.0] — 2026-10-19
 
 **并行发行 Skill 版。** 同一份 `character.json` 现在同时产出 DSH 插件与一份可移植 skill。
 
 ### Added
 
-- `skill/hikari-rento/`：`SKILL.md`（frontmatter + 九段人设，`retrieval` 改写为技能内路由）、
+- `packages/skill/`：`SKILL.md`（frontmatter + 九段人设，`retrieval` 改写为技能内路由）、
   `references/`（四份参考档 + 索引的副本）、`NOTICE.md`（含**译者：明日风等**）、`LICENSE`。
 - `scripts/package-skill.mjs` + `npm run skill`：打包成 `dist/hikari-rento-skill-<version>.tgz`。
 - `docs/skill.md`：插件与 skill 的差别、生成/打包/安装方式。
@@ -35,7 +59,7 @@
 
 ### Changed
 
-- **包名**：`@local/dsh-character-hikari-rento` → `dsh-character-hikari-rento`（`@local` 作用域发不上 npm）。
+- **包名**：`@local/hikari-rento` → `hikari-rento`（`@local` 作用域发不上 npm）。
   `cordis.patch.yml` 里挂载本插件的那一行、`index.js` 的 `@module` 标记同步更新。
 - `package.json` 补齐发行元数据：`repository`、`homepage`、`bugs`、`publishConfig`、`engines`、
   `dsh.engines`、`exports`（含 `character.json` 与 `cordis.patch.yml`）与准确的 `files[]`。

@@ -1,0 +1,37 @@
+{
+  "name": "hikari-rento-skill",
+  "version": "1.0.0",
+  "description": "恋兔光（《这里是，终末停滞委员会。》）角色扮演技能：把她的口癖、脾气与知识边界做成可被 agent 按需加载的 skill 包。A portable skill edition of the same persona.",
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "references/*.md",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md"
+  ],
+  "keywords": [
+    "skill",
+    "agent-skill",
+    "persona",
+    "roleplay",
+    "hikari-rento",
+    "终末停滞委员会",
+    "恋兔光",
+    "角色扮演"
+  ],
+  "license": "MIT",
+  "author": "hikari-rento contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hengyun721/hikari-rento.git",
+    "directory": "packages/skill"
+  },
+  "homepage": "https://github.com/hengyun721/hikari-rento/tree/main/packages/skill#readme",
+  "bugs": {
+    "url": "https://github.com/hengyun721/hikari-rento/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

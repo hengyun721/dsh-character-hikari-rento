@@ -1,102 +1,83 @@
 # 发行
 
-从「本地能跑的 bundle」到「别人 `npm i` 就能装」，一共五步。
+两个包、两套 tag、两份 Release。这篇是发版时的操作手册。
 
-## 0. 仓库归属
+## 0. 仓库
 
-本仓库已经指向 **`hengyun721/dsh-character-hikari-rento`**：README 徽章、`package.json` 的
-`repository` / `homepage` / `bugs`、issue 模板里的链接都是这个地址。
+仓库是 `hengyun721/hikari-rento`，monorepo，两个包在 `packages/` 下：
 
-要挂到别的账号或组织名下，先统一替换（把 `hengyun721` 换成你的名字）：
+| 包 | npm 名 | 内容 |
+|---|---|---|
+| `packages/plugin` | `hikari-rento` | DSH bundle 插件 |
+| `packages/skill` | `hikari-rento-skill` | 可移植 skill |
 
-```powershell
-Get-ChildItem -Recurse -File -Include *.md,*.json,*.yml | ForEach-Object {
-  (Get-Content $_.FullName -Raw).Replace('hengyun721/dsh-character-hikari-rento', 'YOUR-NAME/dsh-character-hikari-rento') |
-    Set-Content $_.FullName -NoNewline -Encoding utf8
-}
-```
+改仓库地址（迁到别的账号 / 组织）时，统一替换 `hengyun721/hikari-rento` 即可，
+徽章、`package.json` 的 `repository` / `homepage` / `bugs`、issue 模板里都有。
 
-```bash
-# macOS / Linux
-grep -rl 'hengyun721/dsh-character-hikari-rento' --include='*.md' --include='*.json' --include='*.yml' . \
-  | xargs sed -i 's|hengyun721/dsh-character-hikari-rento|YOUR-NAME/dsh-character-hikari-rento|g'
-```
-
-替换后 `npm run verify` 仍然要全绿。
-
-## 1. 建仓库
+## 1. 本地检查
 
 ```bash
-git init
-git add .
-git commit -m "chore: initial public release"
-git branch -M main
-git remote add origin https://github.com/hengyun721/dsh-character-hikari-rento.git
-git push -u origin main
+npm run verify        # 产物同步 + 80 条结构自检
+npm run pack          # 两个包各打一份到 dist/
+tar -tzf dist/hikari-rento-skill-1.0.0.tgz | head
 ```
 
-装了 `gh` 的话一步到位：
-
-```bash
-gh repo create hengyun721/dsh-character-hikari-rento --public --source=. --push
-```
-
-在仓库设置里补齐**发行样式**：
-
-| 项 | 值 |
-|---|---|
-| About → Description | 把《这里是，终末停滞委员会。》的恋兔光装进 DeepSeek Harness 的人设插件 |
-| Topics | `dsh` `dsh-plugin` `cordis` `deepseek-harness` `persona` `roleplay` `character-card` |
-| Website | `https://www.npmjs.com/package/dsh-character-hikari-rento`（发布后） |
-| Features | 打开 Issues；Discussions 可选；Wiki 不需要 |
-| Social preview | 用 `assets/banner.svg` 导一张 PNG 上传 |
+`npm run pack` 会先跑一次 `--check`，确保打出来的是最新产物。
 
 ## 2. 发 npm
 
+两个包独立发，版本各走各的：
+
 ```bash
-npm login
-npm run verify        # 绿了再发
-npm publish           # prepublishOnly 会再跑一遍 verify
+# 插件
+npm publish -w packages/plugin
+
+# 技能
+npm publish -w packages/skill
 ```
 
-- 包名 `dsh-character-hikari-rento` 已确认在 npm 上可用；换名字记得同步 `cordis.patch.yml`
-  里 `name:` 那一行和 `scripts/index.template.js` 里的 `@module` 标记（都走 `npm run build`）。
-- `exports` / `files` 决定装出来能拿到什么，`npm pack --dry-run` 可以先看一眼内容。
-- 2.x 的 `dsh.engines.dsh` 是 `>=0.2.0-rc.1`；将来 DSH 改了 bundle 语义，这里要跟着改。
+发之前确认：`packages/*/package.json` 的 `version` 已 bump、`publishConfig.access` 是 `public`、
+`files[]` 没有多带东西（`npm pack --dry-run` 先看一眼）。
 
 ## 3. 打 tag 与 Release
 
+**两套 tag，互不牵连**：
+
 ```bash
-git tag v2.0.0
-git push origin v2.0.0
+# 插件
+V=$(node -p "require('./packages/plugin/package.json').version")
+git tag plugin-v$V && git push origin plugin-v$V
+
+# 技能
+V=$(node -p "require('./packages/skill/package.json').version")
+git tag skill-v$V && git push origin skill-v$V
 ```
 
-Release 说明直接从 `CHANGELOG.md` 对应小节抄；附上安装命令与已知限制。
-标题建议 `v2.0.0 — 可以公开发行了`。
+每个 tag 发各自的 Release，附件用 `dist/` 里对应那份 tgz：
 
-## 4. （可选）进创意工坊
+```bash
+gh release create plugin-v1.0.0 dist/hikari-rento-1.0.0.tgz --title "hikari-rento v1.0.0"
+gh release create skill-v1.0.0  dist/hikari-rento-skill-1.0.0.tgz --title "hikari-rento-skill v1.0.0"
+```
 
-DSH 的插件市场（dsh-web / dsh-market）用一份 workshop 清单描述插件：类型、集成方式、
-生命周期、权限、兼容版本、能力与验证证据。本仓库没有预置那份文件，因为字段与市场版本绑定，
-写死了反而会过期。需要提交时，按市场当期的模板补一份，与 `package.json` 的
-`name` / `version` / `dsh.bundle.patch` 对齐即可。
+Release 说明从 `CHANGELOG.md` 对应小节抄；标题带上包名，别让人分不清是哪一个。
 
-## 5. 发版检查单
+## 4. 发版检查单
 
 - [ ] `npm run verify` 全绿
-- [ ] 仓库地址一致（`git grep hengyun721/dsh-character-hikari-rento` 全部指向这个仓库）
+- [ ] `npm run pack` 两份 tgz 都出来了，内容没有多余文件
+- [ ] 只改了人设 → 两个包版本都要动吗？（只动受影响的，但**产物必须一起重建**）
 - [ ] `CHANGELOG.md` 写了这一版
-- [ ] `package.json` 的 `version` 与 tag 一致
-- [ ] `npm pack --dry-run` 的文件清单里没有多余东西（没有 `.bak`、没有工作区其他目录）
-- [ ] README 的安装命令能照抄执行
-- [ ] 装一遍（本地目录或 tgz），重启客户端，**新建会话**，问一句看是不是她
+- [ ] tag 名与包名对得上（`plugin-v*` / `skill-v*`）
+- [ ] Release 附件是**本包**那份，不是另一个
+- [ ] 装一遍试：插件新建会话、skill 说一句「恋兔光模式」
 
 ## 版本号约定
 
 | 改动 | 版本 |
 |---|---|
-| 只改人设文本、参考档 | patch（`2.0.0` → `2.0.1`） |
-| 新增配置项、新增段落、生成器行为变化 | minor |
-| 包名、preset id、挂载方式、必填段落结构变化 | major |
+| 只改人设文本、参考档 | 两个包都 patch |
+| 新增配置项、新增段落、生成器行为变化 | 插件 minor；skill 看是否受影响 |
+| 包名、preset id、挂载方式、目录结构 | major |
 
-人设改动也建议记进 `CHANGELOG.md`：谁在哪一版把哪句台词改了，日后校对时能救命。
+人设改动也记进 `CHANGELOG.md`：谁在哪一版把哪句台词改了，日后校对时能救命。

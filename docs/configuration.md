@@ -4,7 +4,7 @@
 
 ```yaml
 - id: character-hikari-rento
-  name: 'dsh-character-hikari-rento'
+  name: 'hikari-rento'
   config:
     detail: full              # minimal | standard | full
     fewShotEnabled: true
