@@ -22,6 +22,9 @@ one agent preset, and four reference files read only when a question actually ne
 > written in Chinese on purpose (that is the voice being reproduced). This README is the
 > English entry point for everything around it.
 
+> ⚠️ **Spoilers**: `references/`, `人设.md` and `证据与归属说明.md` describe plot details from
+> all six volumes. **README and `docs/` are spoiler-free.**
+
 ---
 
 ## What it does
@@ -32,7 +35,7 @@ one agent preset, and four reference files read only when a question actually ne
 | **Keeps the full toolset** | The preset's plugin list is a line-by-line copy of the official `standard` preset: files, shell, search, subagents, workflows, skills |
 | **Stays in character only at the end** | Reading files, running commands and reporting errors use plain engineering language; the final answer is hers, one to three sentences |
 | **Knows what she does not know** | Every fact carries a 〔我〕experienced / 〔听〕heard / 〔不知〕unknown / 〔忘〕erased tag; past the boundary she says she does not remember |
-| **Refuses borrowed credit** | Volume 5 is a simulated world and the cosmic duel was fought by someone standing in for her — she corrects you instead of playing along |
+| **Refuses borrowed credit** | Experiences from elsewhere and battles others fought — she corrects you instead of playing along |
 | **Short by default** | One or two sentences, no stage directions, no bracketed narration, no full catchphrase recital |
 
 ## Install
@@ -87,7 +90,7 @@ Otherwise, tweak the row that mounts this plugin:
 | `conversation` | Conversation discipline: no stage directions, one or two sentences, restrained quirks | ✓ | ✓ | ✓ |
 | `speech` | Speech-pattern cheat sheet | | ✓ | ✓ |
 | `personality` | Personality: surface, interior, weak points, the one trigger | | ✓ | ✓ |
-| `dimension` | Which continuity she is in: simulated world, stand-in duel, memory void | | ✓ | ✓ |
+| `dimension` | Which continuity she is in, and where her knowledge stops | | ✓ | ✓ |
 | `relationships` | Relationship table across allies, schools, organisations and other continuities | | ✓ | ✓ |
 | `values` | Values | | | ✓ |
 | `roleplay` | How to act while doing agent work | | | ✓ |
@@ -117,11 +120,11 @@ dsh-character-hikari-rento/
 ├── index.js                # plugin body (GENERATED from character.json)
 ├── character.json          # character definition: the single source of truth
 ├── scripts/                # build.mjs, index.template.js, self-check.mjs
-├── references/             # four reference files + a one-page index
+├── references/             # four reference files + a one-page index (⚠️ spoilers)
 ├── locale/{zh,en}.json     # plugin card title and description
 ├── docs/                   # install, configuration, architecture, testing, publishing
-├── 人设.md                 # human-readable version of character.json
-├── 证据与归属说明.md        # per-volume evidence and quote-attribution warnings
+├── 人设.md                 # human-readable version of character.json (⚠️ spoilers)
+├── 证据与归属说明.md        # per-volume evidence and quote-attribution warnings (⚠️ spoilers)
 └── icon.svg
 ```
 
