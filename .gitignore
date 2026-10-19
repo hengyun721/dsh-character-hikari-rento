@@ -3,6 +3,7 @@ node_modules/
 
 # Build / packaging leftovers
 *.tgz
+dist/
 npm-debug.log*
 pnpm-debug.log*
 yarn-error.log*

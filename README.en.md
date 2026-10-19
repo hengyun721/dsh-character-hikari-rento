@@ -111,6 +111,25 @@ kinds of questions go look something up.
 The absolute path of `references/` is resolved at load time from `import.meta.url`,
 so the plugin works wherever it is installed.
 
+## Skill edition (for other agents)
+
+The same `character.json` also generates a **portable skill**: `skill/hikari-rento/`
+(`SKILL.md` + `references/` + `NOTICE.md` + `LICENSE`). Use it when DSH is not in the
+picture, or when you want to lend the voice to Claude Code / Codex / WorkBuddy and friends.
+
+```bash
+npm run build     # character.json → index.js + skill/hikari-rento/**
+npm run skill     # package it into dist/hikari-rento-skill-<version>.tgz
+```
+
+Copy the whole `skill/hikari-rento/` directory into the host's skills folder, or unpack the
+`hikari-rento-skill-<version>.tgz` from the Release, then start a fresh session and say
+"恋兔光模式".
+
+Plugin and skill are **generated from one source**: `npm run check` compares every artifact,
+so updating only one side fails CI. The difference is how they load — the plugin **replaces**
+the session persona, the skill **lends** a voice on demand. Details in [docs/skill.md](docs/skill.md).
+
 ## Repository layout
 
 ```
@@ -119,7 +138,8 @@ dsh-character-hikari-rento/
 ├── cordis.patch.yml        # composition patch: declares the agent preset and mounts the plugin
 ├── index.js                # plugin body (GENERATED from character.json)
 ├── character.json          # character definition: the single source of truth
-├── scripts/                # build.mjs, index.template.js, self-check.mjs
+├── scripts/                # build.mjs, index.template.js, package-skill.mjs, self-check.mjs
+├── skill/hikari-rento/     # GENERATED portable skill (SKILL.md + references/ + NOTICE + LICENSE)
 ├── references/             # four reference files + a one-page index (⚠️ spoilers)
 ├── locale/{zh,en}.json     # plugin card title and description
 ├── docs/                   # install, configuration, architecture, testing, publishing
@@ -135,6 +155,7 @@ Edit `character.json`, then `npm run build` to regenerate `index.js`.
 | File | Contents |
 |---|---|
 | [docs/install.md](docs/install.md) | Install paths, upgrades, uninstall, troubleshooting |
+| [docs/skill.md](docs/skill.md) | The skill edition: generation, packaging, install, differences |
 | [docs/configuration.md](docs/configuration.md) | Every config field, detail levels, the `sectionName` collision |
 | [docs/architecture.md](docs/architecture.md) | How the bundle works, the generation chain, file responsibilities |
 | [docs/testing.md](docs/testing.md) | What the checks cover and how to add one |
@@ -143,10 +164,11 @@ Edit `character.json`, then `npm run build` to regenerate `index.js`.
 ## Development
 
 ```bash
-npm run build     # character.json + template → index.js
-npm run check     # index.js is in sync + syntax check
-npm test          # dependency-free structural checks (50+)
-npm run verify    # all of the above
+npm run build     # character.json → index.js + skill/hikari-rento/**
+npm run check     # plugin and skill are both in sync + syntax check
+npm test          # dependency-free structural checks (70+)
+npm run skill     # package the skill edition into dist/*.tgz
+npm run verify    # all of the above except packaging
 ```
 
 CI runs `npm run verify` on Node 20 with no dependencies installed.

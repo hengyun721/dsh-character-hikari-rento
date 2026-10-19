@@ -10,7 +10,7 @@
  * Deeper behavioural tests that need `@deepseek-ai/schemastery` live in the
  * maintainer toolchain and are described in docs/testing.md.
  */
-import { readFile, stat } from 'node:fs/promises';
+import { readdir, readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = new URL('../', import.meta.url);
@@ -146,13 +146,36 @@ check('README.md documents every config field', configFields.every((field) => re
 check('README.md links the licence', readme.includes('LICENSE'));
 
 // --------------------------------------------------------------------------
+// skill edition (generated from the same character.json)
+// --------------------------------------------------------------------------
+const skillMd = await read('skill/hikari-rento/SKILL.md');
+const frontmatter = skillMd.startsWith('---\n') ? skillMd.slice(4, skillMd.indexOf('\n---\n')) : '';
+check('skill: SKILL.md opens with YAML frontmatter', frontmatter.length > 0);
+check('skill: frontmatter is named hikari-rento', /^name: hikari-rento$/m.test(frontmatter));
+check('skill: description is present and long enough', /^description: .{40,}$/m.test(frontmatter));
+check('skill: description stays spoiler-free',
+  !/宇宙决战|模拟世界|顶替|记忆抹消/.test(frontmatter));
+check('skill: carries the translator credit', skillMd.includes('译者：明日风等'));
+check('skill: routes to the reference files', skillMd.includes('references/guardrails.md') &&
+  skillMd.includes('references/world-commons.md') && skillMd.includes('references/team-abilities.md') &&
+  skillMd.includes('references/persona.md'));
+check('skill: tells the model to stay inside the skill directory', skillMd.includes('不要读技能目录以外'));
+check('skill: no generator markers left', !skillMd.includes('@@'));
+check('skill: no absolute Windows paths baked in', !/[A-Za-z]:\\\\/.test(skillMd));
+const skillRefs = (await readdir(fileURLToPath(new URL('skill/hikari-rento/references/', ROOT)))).sort();
+check('skill: all five reference files are copied', skillRefs.length === 5, skillRefs.join(', '));
+check('skill: NOTICE travels with it', (await read('skill/hikari-rento/NOTICE.md')).includes('译者：明日风等'));
+check('skill: LICENSE travels with it', (await read('skill/hikari-rento/LICENSE')).includes('MIT License'));
+
+// --------------------------------------------------------------------------
 // repository hygiene
 // --------------------------------------------------------------------------
-for (const file of ['LICENSE', 'NOTICE.md', 'CHANGELOG.md', 'README.en.md', 'CONTRIBUTING.md', '.gitignore']) {
+for (const file of ['LICENSE', 'NOTICE.md', 'CHANGELOG.md', 'README.en.md', 'CONTRIBUTING.md', '.gitignore', 'docs/skill.md']) {
   check(`${file} exists`, await exists(file));
 }
 check('LICENSE is MIT text', (await read('LICENSE')).includes('MIT License'));
 check('NOTICE.md carries the fan-work disclaimer', (await read('NOTICE.md')).includes('原作'));
+check('.gitignore ignores packaged artifacts', (await read('.gitignore')).includes('dist/'));
 
 // --------------------------------------------------------------------------
 // report

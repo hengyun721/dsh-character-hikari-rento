@@ -34,7 +34,19 @@ jobs:
           npm pack --dry-run --json > pack.json
           node -e "
             const files = require('./pack.json')[0].files.map((f) => f.path);
-            const bad = files.filter((f) => /(^|\/)(\.bak|node_modules|\.github|scripts|docs)\//.test(f) || f.endsWith('.bak'));
+            const bad = files.filter((f) => /(^|\/)(\.bak|node_modules|\.github|scripts|docs|skill)\//.test(f) || f.endsWith('.bak'));
             if (bad.length) { console.error('unexpected files in tarball:', bad); process.exit(1); }
             console.log('tarball ok:', files.length, 'files');
           "
+
+      # The skill edition is the same persona in a portable shape; it ships as a
+      # release asset rather than inside the npm tarball.
+      - name: Package the skill edition
+        run: npm run skill
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.node == 20
+        with:
+          name: hikari-rento-skill
+          path: dist/*.tgz
+          if-no-files-found: error

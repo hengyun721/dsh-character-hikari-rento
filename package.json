@@ -1,6 +1,6 @@
 {
   "name": "dsh-character-hikari-rento",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "恋兔光（《这里是，终末停滞委员会。》）角色模仿插件：把她的口癖、脾气和知识边界作为 agent 人设挂进 DeepSeek Harness 会话。A DeepSeek Harness persona plugin for Rento Hikari.",
   "type": "module",
   "exports": {
@@ -61,6 +61,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/build.mjs --check && node --check index.js",
+    "skill": "node scripts/package-skill.mjs",
     "test": "node scripts/self-check.mjs",
     "verify": "npm run check && npm test",
     "prepublishOnly": "npm run verify"

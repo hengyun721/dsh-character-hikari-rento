@@ -118,6 +118,24 @@ npm i dsh-character-hikari-rento
 参考档目录的**绝对路径由 `index.js` 在加载时用 `import.meta.url` 算出来**，
 所以装到哪个目录、换哪台机器都成立，不用改配置。
 
+## Skill 版（给别的 agent 用）
+
+同一份 `character.json` 还会生成一份**可移植的 skill**：`skill/hikari-rento/`
+（`SKILL.md` + `references/` + `NOTICE.md` + `LICENSE`）。不想装 DSH、或者想把这副嗓子
+借给 Claude Code / Codex / WorkBuddy 之类的 agent，就用这一版。
+
+```bash
+npm run build     # character.json → index.js + skill/hikari-rento/**
+npm run skill     # 打包成 dist/hikari-rento-skill-<version>.tgz
+```
+
+装的时候把 `skill/hikari-rento/` 整个目录拷进宿主的 skills 目录，或者解开 Release 里的
+`hikari-rento-skill-<version>.tgz`，新开一个会话说「恋兔光模式」。
+
+插件与 skill **同源**：`npm run check` 会逐个文件比对，改了人设只更新一边会被 CI 拦下。
+差别只在装载方式 —— 插件是**换掉**会话身份，skill 是**按需**借一副嗓子。
+细节见 [docs/skill.md](docs/skill.md)。
+
 ## 目录结构
 
 ```
@@ -127,9 +145,11 @@ dsh-character-hikari-rento/
 ├── index.js                # 插件本体（**生成物**，由 character.json 产出）
 ├── character.json          # 角色定义：唯一真源
 ├── scripts/
-│   ├── build.mjs           # character.json + template → index.js
+│   ├── build.mjs           # character.json + template → index.js + skill/**
 │   ├── index.template.js   # 生成器模板（插件外壳）
+│   ├── package-skill.mjs   # 把 skill/ 打成 dist/*.tgz
 │   └── self-check.mjs      # 零依赖结构自检，CI 跑的就是它
+├── skill/hikari-rento/     # **生成物**：可移植的 skill 版（SKILL.md + references/ + NOTICE + LICENSE）
 ├── references/             # 四份按需读取的参考档 + 一页索引（⚠️ 含剧透）
 ├── locale/{zh,en}.json     # 插件卡片显示名与描述
 ├── docs/                   # 安装、配置、架构、测试、发行说明
@@ -145,6 +165,7 @@ dsh-character-hikari-rento/
 | 文档 | 内容 |
 |---|---|
 | [docs/install.md](docs/install.md) | 三种装法、升级、卸载、排障表 |
+| [docs/skill.md](docs/skill.md) | Skill 版的生成、打包、安装与它与插件的差别 |
 | [docs/configuration.md](docs/configuration.md) | 全部配置项、详细度、`sectionName` 冲突 |
 | [docs/architecture.md](docs/architecture.md) | 插件怎么工作、生成链、文件职责 |
 | [docs/testing.md](docs/testing.md) | 测试覆盖、怎么加断言、人工验收 |
@@ -153,10 +174,11 @@ dsh-character-hikari-rento/
 ## 开发与测试
 
 ```bash
-npm run build     # character.json + template → index.js
-npm run check     # index.js 是否与 character.json 同步 + 语法检查
-npm test          # 零依赖结构自检（50+ 条，CI 同款）
-npm run verify    # 以上全部
+npm run build     # character.json → index.js + skill/hikari-rento/**
+npm run check     # 插件与 skill 是否都与 character.json 同步 + 语法检查
+npm test          # 零依赖结构自检（70+ 条，CI 同款）
+npm run skill     # 打包 skill 版成 dist/*.tgz
+npm run verify    # 以上全部（除 skill 打包）
 ```
 
 CI（`.github/workflows/ci.yml`）在 Node 20 上只跑 `npm run verify` —— 不需要装 DSH，

@@ -5,11 +5,29 @@
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-10-19
+
+**并行发行 Skill 版。** 同一份 `character.json` 现在同时产出 DSH 插件与一份可移植 skill。
+
+### Added
+
+- `skill/hikari-rento/`：`SKILL.md`（frontmatter + 九段人设，`retrieval` 改写为技能内路由）、
+  `references/`（四份参考档 + 索引的副本）、`NOTICE.md`（含**译者：明日风等**）、`LICENSE`。
+- `scripts/package-skill.mjs` + `npm run skill`：打包成 `dist/hikari-rento-skill-<version>.tgz`。
+- `docs/skill.md`：插件与 skill 的差别、生成/打包/安装方式。
+- 自检新增 13 条 skill 断言（frontmatter、剧透-free 的 description、参考档齐全、NOTICE/许可证随包）。
+- CI 增加「打包 skill 并上传 artifact」一步。
+
 ### Changed
 
-- README 去掉 banner 大图（`assets/banner.svg` 文件保留，只作社交预览素材）。
-- 补翻译署名：中文版为民间汉化，**译者：明日风等**。README／README.en／NOTICE 各加一行。
-- 各文档开头补一句「本文件讲什么」：`SECURITY.md`、`docs/install.md`、`docs/testing.md`。
+- `scripts/build.mjs` 由「只出 `index.js`」升级为「出 9 个产物」，`npm run check` 逐个比对，
+  插件与 skill 任何一边漂了都会失败。
+- README／README.en 增加 Skill 版章节、目录结构与命令更新。
+
+### Fixed
+
+- README 去 banner 大图；补翻译署名；公开文档（README／README.en／CONTRIBUTING／CHANGELOG）去剧透，
+  两个 README 顶部加剧透提示。
 
 ## [2.0.0] — 2026-10-18
 
