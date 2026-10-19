@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # The checks are dependency-free on purpose: no install step, so CI stays
+      # meaningful even when the registry is unavailable.
+      - name: Structure and generation checks
+        run: npm run verify
+
+      - name: Package contents stay clean
+        run: |
+          npm pack --dry-run --json > pack.json
+          node -e "
+            const files = require('./pack.json')[0].files.map((f) => f.path);
+            const bad = files.filter((f) => /(^|\/)(\.bak|node_modules|\.github|scripts|docs)\//.test(f) || f.endsWith('.bak'));
+            if (bad.length) { console.error('unexpected files in tarball:', bad); process.exit(1); }
+            console.log('tarball ok:', files.length, 'files');
+          "

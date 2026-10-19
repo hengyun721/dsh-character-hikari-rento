@@ -1,0 +1,65 @@
+name: Bug / 安装问题
+description: 装了但没生效、报错、提示词不对、行为跑偏
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        先用下面这条命令确认生成物没有漂：
+
+        ```bash
+        npm run verify
+        ```
+
+        如果报 `index.js is out of date`，跑一次 `npm run build` 再看。
+  - type: input
+    id: dsh-version
+    attributes:
+      label: DSH 版本
+      placeholder: 0.2.0-rc.2
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: 插件版本
+      placeholder: 2.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: 怎么装的
+      options:
+        - npm
+        - 本地目录
+        - tgz / npm pack
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望什么
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际发生什么
+      description: 有报错就把原文贴全（`dsh-scope`、`agent-preset/invalid` 这类不变式名很有用）
+    validations:
+      required: true
+  - type: dropdown
+    id: detail
+    attributes:
+      label: detail 开关
+      options: [minimal, standard, full, 不确定]
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 自查
+      options:
+        - label: 装完是**新建会话**测的，不是在旧会话里切预设
+          required: true
+        - label: 重启过客户端
+          required: true

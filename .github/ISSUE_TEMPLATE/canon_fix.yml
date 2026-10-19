@@ -1,0 +1,44 @@
+name: 设定 / 台词更正
+description: 她说错了、说成了别人说的话、把别人的经历认成自己的
+labels: [canon]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        这类 issue 最有价值，也最容易判错。提交前请先看
+        [`证据与归属说明.md`](https://github.com/hengyun721/dsh-character-hikari-rento/blob/main/%E8%AF%81%E6%8D%AE%E4%B8%8E%E5%BD%92%E5%B1%9E%E8%AF%B4%E6%98%8E.md)：
+        各卷叙述者会切换，**「台词里出现『我』就是她」是错的**。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 她说了什么 / 她答错了什么
+      description: 贴实际对话，两三句就够
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 出处
+      description: 卷数 + 场景/章节；说不出处就先标「不确定」，别硬填
+      placeholder: 第 6 卷，纽约会谈那一段
+    validations:
+      required: true
+  - type: textarea
+    id: correct
+    attributes:
+      label: 正确的是什么
+      description: 一句话说清她该答什么，或者她本来就该说「不知道」
+    validations:
+      required: true
+  - type: dropdown
+    id: tag
+    attributes:
+      label: 这条属于哪一类
+      options:
+        - 〔我〕她亲历过的
+        - 〔听〕她听来的
+        - 〔不知〕她根本不知道
+        - 〔忘〕记忆被抹消的
+        - 别次元 / 模拟世界，不是她
+    validations:
+      required: true
