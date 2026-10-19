@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="sakura" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd7e6"/>
+      <stop offset="100%" stop-color="#ff8ab5"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#sakura)"/>
+  <g fill="#fff" opacity="0.95">
+    <ellipse cx="24" cy="17" rx="5" ry="13" transform="rotate(-18 24 17)"/>
+    <ellipse cx="40" cy="17" rx="5" ry="13" transform="rotate(18 40 17)"/>
+  </g>
+  <g fill="#7a3352">
+    <ellipse cx="26" cy="34" rx="4.2" ry="5"/>
+    <ellipse cx="38" cy="34" rx="4.2" ry="5"/>
+  </g>
+  <path d="M28 46c2.6 2.2 5.4 2.2 8 0" fill="none" stroke="#7a3352" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="32" y="60" font-size="9" text-anchor="middle" fill="#7a3352" font-family="sans-serif">恋</text>
+</svg>
