@@ -64,5 +64,8 @@
       "patch": "./cordis.patch.yml"
     }
   },
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/build.mjs --check"
+  }
 }
