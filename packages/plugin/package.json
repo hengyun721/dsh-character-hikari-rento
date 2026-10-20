@@ -22,10 +22,6 @@
     "NOTICE.md"
   ],
   "icon": "./icon.svg",
-  "meta": {
-    "title": "恋兔光 · 角色模仿",
-    "description": "把《这里是，终末停滞委员会。》的恋兔光作为人设挂进会话：最强美少女的自夸、尾巴上的「～」「♪」「啦」「哦」「呢」，以及逞强、怕烫怕辣怕鬼、把真心藏到最后的笨拙。"
-  },
   "keywords": [
     "dsh",
     "dsh-plugin",
@@ -54,12 +50,10 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "dsh": ">=0.2.0-rc.1"
   },
   "dsh": {
-    "engines": {
-      "dsh": ">=0.2.0-rc.1"
-    },
     "bundle": {
       "patch": "./cordis.patch.yml"
     }

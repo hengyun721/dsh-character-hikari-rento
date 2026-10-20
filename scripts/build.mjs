@@ -231,12 +231,14 @@ ${character.name}（《这里是，终末停滞委员会。》）的 **DeepSeek 
 
 ## 安装
 
-\`\`\`bash
-npm i hikari-rento
-\`\`\`
+本目录就是 DSH 的组合包（\`dsh.bundle.patch\` → \`cordis.patch.yml\`）。
+**安装目标是本目录，不是 monorepo 的仓库根** —— 根 \`package.json\` 没有 \`dsh.bundle\`。
 
-或在 DSH 里 **设置 → 插件 → 安装本地 bundle**，指向本目录；装完**重启客户端**，
-并且**新建一个会话**（不要在旧会话里切 preset）。
+- **本地目录**：DSH → **设置 → 插件 → 安装本地 bundle** → 选本目录
+- **tgz**：装 Release 里的 \`hikari-rento-${version}.tgz\`
+- **npm**：本版本发布到注册表之后，在插件管理器里填 \`hikari-rento\`（版本 ${version}）
+
+装完**重启客户端**，并且**新建一个会话**（不要在旧会话里切 preset）。
 
 ## 配置
 

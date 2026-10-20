@@ -5,6 +5,29 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **安装入口归位**：所有文档改指向 `packages/plugin/`。1.0.0 拆成 monorepo 后仓库根不再是组合包
+  （根 `package.json` 没有 `dsh.bundle`），指过去会被 DSH 判成 `not-a-bundle`；`docs/install.md`
+  补了 `not-a-bundle` 与 `not-found` 两条排障，并删掉从未成立的 `npm i hikari-rento`
+  —— npm 路线改成在插件管理器里填 `hikari-rento@<version>`，填之前先 `npm view` 确认已发布。
+- **`engines.dsh` 挪到顶层**：DSH 只读顶层 `engines.dsh`，原先写在 `dsh.engines` 里，
+  等于没有版本门槛。
+- **locale 展示元数据**：`title`/`description` 包进 `meta`，否则插件页回退显示包名；
+  同时删掉 `package.json` 里没有任何代码读取的顶层 `meta`。
+
+### Changed
+
+- **preset 与 DSH 0.2.1-rc.2 的 `standard` 逐行对齐**：补 `time-context`、`tool-schedule`、
+  `tool-plugin-market`（disabled）；删掉当前宿主已不存在的 `tool-ralph`、以及
+  `@deepseek-ai/dsh-tool-subagent` 里不再存在的 `backgroundMode`；plan-mode 文案跟进
+  2026-10-09 那次「只在批准后离开 plan mode」的改动。
+
+### Added
+
+- 自检扩到 86 条：仓库根不得声明 `dsh`（防止再把根目录当组合包）、顶层 `engines.dsh`、
+  两份 locale 的 `meta.title`/`meta.description` 必须齐备且不出现扁平的 `title`。
+
 ## [plugin 1.0.2 / skill 1.0.2] — 2026-10-19
 
 ### Added

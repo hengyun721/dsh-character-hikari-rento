@@ -14,7 +14,7 @@ npm run verify
 |---|---|
 | `npm run build` | `character.json` → 插件包与技能包的全部产物 |
 | `npm run check` | 重算并逐个比对两个包的产物（不一致即失败） |
-| `npm test` | `scripts/self-check.mjs`，80 条零依赖结构自检 |
+| `npm test` | `scripts/self-check.mjs`，86 条零依赖结构自检 |
 | `npm run privacy` | 扫本机绝对路径、回环地址、令牌、邮箱与内部目录名 |
 
 ## 自检覆盖什么
@@ -22,7 +22,7 @@ npm run verify
 `scripts/self-check.mjs` 分五组，全部是「读文件 + 断言」，无网络、无依赖：
 
 1. **清单**：名字可发布（无 `@local`、小写连字符）、SemVer、MIT、非 private、`publishConfig`、
-   `repository`/`bugs`、关键词、`dsh.bundle.patch`、`dsh.engines.dsh`、`exports` 五项、
+   `repository`/`bugs`、关键词、`dsh.bundle.patch`、顶层 `engines.dsh`、`exports` 五项、
    `icon`、`files[]` 是否把运行时产物全带上。
 2. **补丁**：挂载的包名正确、没有残留 `@local/`、恰好一个 agent preset、
    preset id 与显示名、**没有**挂 `@deepseek-ai/dsh-persona`（重名冲突）、
@@ -32,7 +32,7 @@ npm run verify
    示例台词结构正确且足够短、对话纪律与禁止自称的两条关键文案在位。
 4. **生成物**：`apply` / `renderCharacterPrompt` / `character` 三个导出、插件名、`inject`、
    Config 五个字段、三个 detail 级别、无 `@@` 残留、`import.meta.url` 解析路径、`interpolate: false`。
-5. **参考档与卫生**：五份参考档存在且索引链接齐全、两份 locale 有 title/description、
+5. **参考档与卫生**：五份参考档存在且索引链接齐全、两份 locale 的 `meta.title`/`meta.description` 齐备且没有扁平的 `title`、
    图标 < 256 KiB、README 覆盖全部配置字段、LICENSE/NOTICE/CHANGELOG/README.en/CONTRIBUTING/.gitignore 存在。
 
 ## 加一条断言

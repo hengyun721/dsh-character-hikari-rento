@@ -17,7 +17,7 @@
 ## 1. 本地检查
 
 ```bash
-npm run verify        # 产物同步 + 80 条结构自检
+npm run verify        # 产物同步 + 86 条结构自检
 npm run pack          # 两个包各打一份到 dist/
 tar -tzf dist/hikari-rento-skill-1.0.0.tgz | head
 ```

@@ -25,20 +25,26 @@
 |---|---|---|
 | 是什么 | DeepSeek Harness **bundle 插件** | 可移植 **skill** 包 |
 | 怎么加载 | 声明 agent preset，**替换**会话人设 | 宿主按需加载，**借**一副嗓子 |
-| 工具 | 与官方 `standard` preset 完全一致 | 用宿主自己的工具 |
-| 装法 | `npm i hikari-rento` / 插件管理器 | 拷目录 / 解开 `.tgz` |
+| 工具 | 与官方 `standard` preset 逐行一致（对齐 DSH 0.2.1-rc.2） | 用宿主自己的工具 |
+| 装法 | 插件管理器（本地目录 / tgz / npm） | 拷目录 / 解开 `.tgz` |
 | tag | `plugin-v*` | `skill-v*` |
 
 ## 安装
 
 ### 插件（DSH）
 
-```bash
-npm i hikari-rento
-```
+> **安装目标是 [`packages/plugin/`](packages/plugin) —— 不是仓库根。**
+> 根的 `package.json` 没有 `dsh.bundle`，指过去会被判 `not-a-bundle`（1.0.0 拆分后如此；
+> 2.x 时代根目录才是 bundle）。
 
-装完在 DSH 里 **设置 → 插件 → 安装** `hikari-rento@latest`，**重启客户端**，然后**新建会话**。
-从源码装则指向 `packages/plugin/` 目录。
+**本地目录（最稳）**：**设置 → 插件 → 安装本地 bundle** → 选 `<仓库>/packages/plugin`。
+
+**tgz**：`npm run pack:plugin` 产出 `dist/hikari-rento-<version>.tgz`，或直接下 Release 附件，装它。
+
+**npm（该版本发布之后）**：在插件管理器里填 `hikari-rento@<version>`；
+先 `npm view hikari-rento version` 确认它真的在注册表里，报 `not-found` 就说明还没发布。
+
+装完**重启客户端**，然后**新建会话**。逐条排障见 [安装文档](docs/install.md)。
 
 ### Skill（任意 agent）
 
@@ -168,7 +174,7 @@ hikari-rento/
 ```bash
 npm run build      # character.json → 两个包的全部产物
 npm run check      # 产物是否与 character.json 同步
-npm test           # 零依赖结构自检（80 条，CI 同款）
+npm test           # 零依赖结构自检（86 条，CI 同款）
 npm run pack       # 打包 plugin 与 skill 到 dist/
 npm run privacy    # 扫本机路径、密钥、邮箱
 npm run verify     # check + test + privacy

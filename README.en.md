@@ -26,20 +26,27 @@ versions, separate tags, separate releases. Neither is an artifact of the other.
 |---|---|---|
 | What | DeepSeek Harness **bundle plugin** | Portable **skill** package |
 | How it loads | Declares an agent preset; **replaces** the session persona | The host loads it on demand; **lends** a voice |
-| Tools | Line-by-line copy of the official `standard` preset | Whatever the host provides |
-| Install | `npm i hikari-rento` / plugin manager | Copy the folder / unpack the `.tgz` |
+| Tools | Row-for-row copy of the official `standard` preset (aligned with DSH 0.2.1-rc.2) | Whatever the host provides |
+| Install | Plugin manager (local folder / tgz / npm) | Copy the folder / unpack the `.tgz` |
 | Tag | `plugin-v*` | `skill-v*` |
 
 ## Install
 
 ### Plugin (DSH)
 
-```bash
-npm i hikari-rento
-```
+> **The install target is [`packages/plugin/`](packages/plugin) — never the repository root.**
+> The root `package.json` carries no `dsh.bundle`, so pointing the installer at it fails with
+> `not-a-bundle`. That has been true since the 1.0.0 monorepo split; in 2.x the root *was* the bundle.
 
-Then in DSH: **Settings → Plugins → install** `hikari-rento@latest`, restart the client, and
-**open a new session**. From a checkout, point the installer at `packages/plugin/`.
+**Local folder (most reliable)**: **Settings → Plugins → install local bundle** → pick
+`<checkout>/packages/plugin`.
+
+**tgz**: run `npm run pack:plugin` for `dist/hikari-rento-<version>.tgz`, or use the release asset.
+
+**npm (once that version is published)**: enter `hikari-rento@<version>` in the plugin manager.
+Confirm with `npm view hikari-rento version` first; `not-found` means it is not published yet.
+
+Restart the client afterwards, then **open a new session**. See [the install guide](docs/install.md).
 
 ### Skill (any agent)
 

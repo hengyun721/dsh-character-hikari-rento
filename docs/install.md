@@ -1,41 +1,59 @@
 # 安装与升级
 
-四种装法、升级与卸载，以及一张排障表。装完记得**新建会话**，原因见下。
+装法、升级与卸载，以及一张排障表。装完记得**新建会话**，原因见下。
+
+## 先看这一条：装的是哪一层
+
+> **安装目标永远是 `packages/plugin/`（或它打出来的 tgz / 发布到 npm 的包名）。**
+> **仓库根目录不是组合包** —— 根的 `package.json` 是 `hikari-rento-monorepo`，没有 `dsh.bundle`，
+> 指过去会被 DSH 判成 `not-a-bundle`（`<包名> declares no dsh.bundle`），装不上。
+>
+> 这是 1.0.0 把单包拆成 monorepo 时变的；2.x 时代根目录本身就是 bundle，所以「指仓库目录」曾经能用。
 
 ## 要求
 
 | | |
 |---|---|
-| DeepSeek Harness | **≥ 0.2.0-rc.1**（`package.json` 的 `dsh.engines.dsh`） |
+| DeepSeek Harness | **≥ 0.2.0-rc.1**（本包声明的最低版本） |
 | Node | ≥ 20（只影响本地构建；装了插件本身不需要 Node） |
 | 权限 | 安装 bundle 会在 Host 进程里执行插件代码，需要**完全权限**或一次批准 |
 
-## 方式一：npm
-
-```bash
-npm i hikari-rento
-```
-
-然后在 DSH 里 **设置 → 插件 → 安装** `hikari-rento@latest`，**重启客户端**。
-
-## 方式二：本地目录
+## 方式一：本地目录（从源码装，最稳）
 
 ```bash
 git clone https://github.com/hengyun721/hikari-rento.git
 ```
 
-**设置 → 插件 → 安装本地 bundle**，指向克隆出来的目录（绝对路径）。
+DSH 里 **设置 → 插件 → 安装本地 bundle**，选 **`<仓库>/packages/plugin`**（精确到这一层，
+不要选仓库根，也不要选 `packages/`）。装完**重启客户端**，然后**新建会话**。
 
-## 方式三：从源码自己打
+## 方式二：装 tgz（等同本地目录）
 
 ```bash
-git clone https://github.com/hengyun721/hikari-rento.git
 cd hikari-rento
 npm run verify        # 先确认生成物与自检全绿
-npm pack              # 产出 hikari-rento-2.0.0.tgz
+npm run pack:plugin   # 产出 dist/hikari-rento-<version>.tgz
 ```
 
-装 tgz 与装本地目录等价；`files[]` 已经列清楚会打进包里的一切。
+在 DSH 里装这个 tgz，或直接用 Release 页的附件 `hikari-rento-<version>.tgz`。两者是同一份构建
+（`files[]` 已经列清楚会打进包里的一切，`tar -tzf` 可以自查）。
+
+## 方式三：从 npm（该版本发布之后）
+
+在 DSH 里 **设置 → 插件 → 安装** 填：
+
+```
+hikari-rento@<version>
+```
+
+发版后先确认注册表里真的有这个版本，再填：
+
+```bash
+npm view hikari-rento version
+```
+
+> 报 `not-found` 只有一个意思：**这个版本还没推到 npm**。这时用方式一或方式二，
+> 不要去改任何配置 —— 注册表里没有的东西，管理器也变不出来。
 
 ## 装完必须「新建会话」
 
@@ -52,8 +70,8 @@ npm pack              # 产出 hikari-rento-2.0.0.tgz
 
 | 从 | 到 | 要做的事 |
 |---|---|---|
-| 2.x | 2.x | 直接装新版，重启，开新会话 |
-| 1.x | 2.x | 包名变了（`@local/...` → `hikari-rento`）。先移除旧 bundle，再装新的；旧 profile 里若还留着 `@local/...` 那一行，让插件管理器重装/同步一次 |
+| 1.0.x | 1.0.x | 直接装新版，重启，开新会话 |
+| 旧名（`@local/dsh-character-hikari-rento`、`dsh-character-hikari-rento`） | `hikari-rento` | 先在插件页把旧的那条**移除**（它多半是 2.x 留下的死链接：指向仓库根、没有 `dsh.bundle`，看起来装着其实没装），再装 `packages/plugin/` |
 | 任意 | 任意 | **不要**手写 `$DSH_HOME/profiles/<profile>/package.json`，也不要在 profile 目录里跑 pnpm —— 那些步骤由插件管理器负责 |
 
 ## 卸载
@@ -67,7 +85,10 @@ npm pack              # 产出 hikari-rento-2.0.0.tgz
 
 | 症状 | 大概率原因 | 怎么做 |
 |---|---|---|
-| 预设列表里没有「角色：恋兔光」 | 没重启 / 装到了别的 profile | 完全退出客户端再开；确认当前 profile |
+| 安装被拒：`not-a-bundle` / `declares no dsh.bundle` | 指到了**仓库根**（或 `packages/`） | 重选，精确到 `packages/plugin/` |
+| 安装被拒：`not-found` | 该版本还没发布到 npm | 改用本地目录或 tgz |
+| 安装成功但预设列表里没有「角色：恋兔光」 | 没重启 / 装到了别的 profile / 旧会话 | 完全退出客户端再开；确认当前 profile；**新建会话** |
+| 插件页能看到一条装了却启不了的旧条目 | 2.x 时代的链接依赖（`@local/...`） | 移除它，再按方式一装 |
 | 切预设时报 `scope key is already bound to a parent` | 在已存在的会话里切了 preset | 新建一个会话 |
 | 她答得又长又像解说 | `detail` 太小 / 模型把「示例台词」当模板 | 调到 `full`；`fewShotEnabled: false` 试试 |
 | 她会认领没经历过的剧情 | 参考档没被读到 | 确认 `detail: full`，且 `references/` 四份都在 |

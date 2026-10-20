@@ -55,6 +55,11 @@ check('root: packaging scripts for both editions',
   typeof root.scripts?.['pack:plugin'] === 'string' && typeof root.scripts?.['pack:skill'] === 'string');
 check('root: repository points at hikari-rento',
   (root.repository?.url ?? '').includes('github.com/hengyun721/hikari-rento'));
+// From 1.0.0 the bundle lives in packages/plugin. A root that declares `dsh` would let
+// people install the monorepo root and collect a `not-a-bundle` refusal; an entry point
+// would make it look installable while its patch path leads nowhere.
+check('root: is not a bundle — no dsh field and no entry point',
+  root.dsh === undefined && root.main === undefined && root.exports === undefined);
 
 // --------------------------------------------------------------------------
 // plugin package
@@ -71,13 +76,24 @@ check('plugin: exports exposes character.json and the patch',
     pluginPkg.exports?.['./cordis.patch.yml'] === './cordis.patch.yml');
 check('plugin: exports exposes locale glob', pluginPkg.exports?.['./locale/*.json'] === './locale/*.json');
 check('plugin: dsh.bundle.patch declared', pluginPkg.dsh?.bundle?.patch === './cordis.patch.yml');
-check('plugin: dsh.engines.dsh pinned', typeof pluginPkg.dsh?.engines?.dsh === 'string');
+// DSH reads a top-level `engines.dsh`; the old `dsh.engines` nest is read by nothing,
+// so asserting it let an unenforced version gate look enforced.
+check('plugin: engines.dsh pinned at the top level', typeof pluginPkg.engines?.dsh === 'string');
+check('plugin: no dsh.engines nest', pluginPkg.dsh?.engines === undefined);
 check('plugin: icon declared', pluginPkg.icon === './icon.svg');
 const requiredInFiles = ['index.js', 'character.json', 'cordis.patch.yml', 'icon.svg', 'locale/*.json', 'references/*.md'];
 check('plugin: files[] ships every runtime artifact',
   requiredInFiles.every((entry) => pluginPkg.files?.includes(entry)),
   requiredInFiles.filter((entry) => !pluginPkg.files?.includes(entry)).join(', '));
 check('plugin: files[] leaves build tooling out', !pluginPkg.files?.some((f) => f.startsWith('scripts')));
+// DSH reads display text from locale JSON under `meta`; a flat `title` is silently ignored
+// and the panel falls back to the package name.
+for (const language of ['en', 'zh']) {
+  const dict = JSON.parse(await read(`packages/plugin/locale/${language}.json`));
+  check(`plugin locale ${language}: meta.title and meta.description are set`,
+    [dict.meta?.title, dict.meta?.description].every((v) => typeof v === 'string' && v.trim() !== ''));
+  check(`plugin locale ${language}: no flat title/description`, dict.title === undefined && dict.description === undefined);
+}
 
 // --------------------------------------------------------------------------
 // skill package

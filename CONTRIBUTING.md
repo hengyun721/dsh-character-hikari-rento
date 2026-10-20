@@ -24,7 +24,7 @@
 
 ```bash
 npm run build     # character.json → 两个包的全部产物
-npm run verify    # 产物同步 + 80 条结构自检 + 隐私扫描
+npm run verify    # 产物同步 + 86 条结构自检 + 隐私扫描
 ```
 
 **开 PR 前另跑一次 `npm run privacy`**：它扫本机绝对路径、回环地址、令牌、邮箱和内部目录名。
