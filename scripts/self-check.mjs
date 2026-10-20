@@ -41,7 +41,7 @@ const character = JSON.parse(await read('character.json'));
 const index = await read('packages/plugin/index.js');
 const readme = await read('README.md');
 const detailLevels = ['minimal', 'standard', 'full'];
-const configFields = ['detail', 'fewShotEnabled', 'sectionName', 'sectionOrder', 'includeRuntimeContext'];
+const configFields = ['detail', 'fewShotEnabled', 'sectionName', 'sectionOrder', 'anchorEnabled', 'includeRuntimeContext'];
 
 // --------------------------------------------------------------------------
 // monorepo root

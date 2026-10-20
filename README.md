@@ -101,6 +101,7 @@ DSH 的 preset 注册表把「会话作用域 → preset 版本」记在一次�
 | `fewShotEnabled` | `true` | 附加 15 条**短**示例台词。嫌占 token 就关掉 |
 | `sectionName` | `deployment:persona-prefix` | 段落名。默认值会**遮蔽**部署级人设；**只有全局挂载时才需要改**成别的名字 |
 | `sectionOrder` | `0` | 放在提示词最前面；改成 `10150` 变成末尾的附加段落 |
+| `anchorEnabled` | `true` | 提示词末尾再加一段「尾锚」（`deployment:persona-suffix`）：长任务下把口吻拉回来 |
 | `includeRuntimeContext` | `true` | 关掉会连沙箱策略、审批策略一起移除（全有全无） |
 
 ### 三个详细度

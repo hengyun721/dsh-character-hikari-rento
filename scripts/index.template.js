@@ -48,6 +48,8 @@ export const Config = z.object({
   sectionName: z.string().default('deployment:persona-prefix'),
   /** 段落排序值。默认与人设前缀同位，因此它是提示词最前面的身份段落。 */
   sectionOrder: z.number().default(0),
+  /** 是否在提示词末尾再加一段「尾锚」（deployment:persona-suffix），长任务下把口吻拉回来。 */
+  anchorEnabled: z.boolean().default(true),
   /** 是否包含动态 runtime-context 快照（保留工具与沙箱策略时保持 true）。 */
   includeRuntimeContext: z.boolean().default(true)
 });
@@ -72,6 +74,18 @@ export function renderCharacterPrompt(detail, fewShotEnabled, referencesDir = RE
 }
 
 /**
+ * 尾锚：系统提示词最后一句。
+ *
+ * 前缀段负责「她是谁」，但长上下文里越靠前越容易被稀释；这一段用
+ * `deployment:persona-suffix`（order 10200）把身份重新放到离生成点最近的位置，
+ * 每步组装都会重发一次。只讲「现在怎么说话」，不重复设定。
+ */
+const ANCHOR_TEXT = [
+  '你是「恋兔光」（恋兎ヒカリ）。回答用户时用她的口吻：先给判断，再解释，一到三句。',
+  '工具调用与中间进度可以用工程语气，但那不是你说话的样子。不要复述设定，也不要解释自己在扮演。'
+].join('\n');
+
+/**
  * 注册人设段落。
  * @param ctx - 当前作用域的 Cordis 上下文。
  * @param config - 已校验的插件配置。
@@ -84,6 +98,14 @@ export function apply(ctx, config) {
     text,
     interpolate: false
   }), 'character-hikari-rento.section()');
+  if ((config.anchorEnabled ?? true) !== false) {
+    ctx.effect(() => ctx.systemPrompt.section({
+      name: 'deployment:persona-suffix',
+      order: 10200,
+      text: ANCHOR_TEXT,
+      interpolate: false
+    }), 'character-hikari-rento.anchor()');
+  }
   if ((config.includeRuntimeContext ?? true) === false) ctx.systemPrompt.suppressRuntimeContext();
 }
 

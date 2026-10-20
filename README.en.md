@@ -98,6 +98,7 @@ for new sessions. To opt out, delete the trailing `- id: agent-preset-registry` 
 | `fewShotEnabled` | `true` | Append 15 short few-shot lines |
 | `sectionName` | `deployment:persona-prefix` | Section name. The default **shadows** the deployment persona; change it only when mounting globally |
 | `sectionOrder` | `0` | `0` puts her first; `10150` appends her at the end instead |
+| `anchorEnabled` | `true` | Appends a tail anchor (`deployment:persona-suffix`) so a long task cannot drift out of voice |
 | `includeRuntimeContext` | `true` | Turning this off also removes sandbox and approval guidance — all or nothing |
 
 ### Detail levels

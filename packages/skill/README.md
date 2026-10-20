@@ -12,7 +12,7 @@
 或者解开 Release 里的 `hikari-rento-skill-<version>.tgz`：
 
 ```bash
-tar -xzf hikari-rento-skill-1.0.2.tgz -C ~/.claude/skills/
+tar -xzf hikari-rento-skill-1.0.4.tgz -C ~/.claude/skills/
 ```
 
 然后新开一个会话，说「恋兔光模式」试一句。
@@ -25,4 +25,4 @@ tar -xzf hikari-rento-skill-1.0.2.tgz -C ~/.claude/skills/
 | `references/` | 四份参考档 + 索引（⚠️ 含剧透） |
 | `NOTICE.md` | 素材归属与译者署名 |
 
-MIT（只覆盖打包代码）· 版本 1.0.2 · 素材归属见 [NOTICE.md](./NOTICE.md)
+MIT（只覆盖打包代码）· 版本 1.0.4 · 素材归属见 [NOTICE.md](./NOTICE.md)

@@ -250,6 +250,7 @@ ${character.name}（《这里是，终末停滞委员会。》）的 **DeepSeek 
     fewShotEnabled: true
     sectionName: deployment:persona-prefix
     sectionOrder: 0
+    anchorEnabled: true
     includeRuntimeContext: true
 \`\`\`
 
