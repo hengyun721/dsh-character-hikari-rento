@@ -81,6 +81,40 @@ const SKILL_SECTIONS = [
 /** JSON block, formatted to sit inline inside the generated module. */
 const block = (value) => JSON.stringify(value, null, 2);
 
+/**
+ * 口头池：按语境分组的短句素材，拼在 `speech` 段后面。
+ *
+ * 不给「必须用」的硬规则，也不做查重——只在提示词里说明「按语境挑一句，
+ * 别每次都用同一条」，让模型自己随机取。语境错配才算错，说法不同不算错。
+ */
+function renderPools(character) {
+  const pools = character.speechPools;
+  if (!pools || Object.keys(pools).length === 0) return '';
+
+  const lines = [
+    '【口头池（按当下语境挑一句；语境对不上就自己说，别硬套）】',
+    '同一段对话里别复用同一条；说法不同不算错，用错场合才算错。',
+    '',
+  ];
+  for (const [context, phrases] of Object.entries(pools)) {
+    lines.push(`- ${context}：${phrases.map((p) => `「${p}」`).join('')}`);
+  }
+  return lines.join('\n');
+}
+
+/** 把口头池并进 `speech` 段，插件与 skill 共用同一份渲染结果。 */
+function withPools(character) {
+  const pools = renderPools(character);
+  if (!pools) return character;
+  return {
+    ...character,
+    sections: {
+      ...character.sections,
+      speech: `${character.sections.speech.trimEnd()}\n\n${pools}`,
+    },
+  };
+}
+
 function renderPlugin(template, character, pkgName) {
   const sections = character.sections ?? {};
   const unknown = Object.keys(sections).filter((key) => !ORDER.includes(key));
@@ -280,7 +314,9 @@ async function collectOutputs() {
     readFile(new URL('LICENSE', ROOT), 'utf8'),
     readFile(new URL('NOTICE.md', ROOT), 'utf8'),
   ]);
-  const character = JSON.parse(characterRaw);
+  const raw = JSON.parse(characterRaw);
+  // 口头池并进 speech 段后再渲染；包里的 character.json 仍是未并的原始副本。
+  const character = withPools(raw);
   const pluginPkg = await readJson('packages/plugin/package.json');
   const skillPkg = await readJson('packages/skill/package.json');
 
@@ -288,7 +324,7 @@ async function collectOutputs() {
 
   // --- plugin package -----------------------------------------------------
   outputs.set('packages/plugin/index.js', renderPlugin(template, character, pluginPkg.name));
-  outputs.set('packages/plugin/character.json', `${JSON.stringify(character, null, 2)}\n`);
+  outputs.set('packages/plugin/character.json', `${JSON.stringify(raw, null, 2)}\n`);
   outputs.set('packages/plugin/README.md', renderPluginReadme(character, pluginPkg.version));
   outputs.set('packages/plugin/NOTICE.md', notice);
   outputs.set('packages/plugin/LICENSE', license);
