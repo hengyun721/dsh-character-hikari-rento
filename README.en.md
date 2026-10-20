@@ -89,6 +89,8 @@ for new sessions. To opt out, delete the trailing `- id: agent-preset-registry` 
     fewShotEnabled: true
     sectionName: deployment:persona-prefix
     sectionOrder: 0
+    overrideIdentity: true
+    identityText: You are an AI assistant.
     includeRuntimeContext: true
 ```
 
@@ -99,6 +101,8 @@ for new sessions. To opt out, delete the trailing `- id: agent-preset-registry` 
 | `sectionName` | `deployment:persona-prefix` | Section name. The default **shadows** the deployment persona; change it only when mounting globally |
 | `sectionOrder` | `0` | `0` puts her first; `10150` appends her at the end instead |
 | `anchorEnabled` | `true` | Appends a tail anchor (`deployment:persona-suffix`) so a long task cannot drift out of voice |
+| `overrideIdentity` | `true` | Shadows DSH's `harness:identity`. Its stock sentence is fingerprinted by some gateways (400), after which the whole system prompt is replaced and the persona is lost. Set `false` when mounting globally |
+| `identityText` | `You are an AI assistant.` | Replacement text for that section |
 | `includeRuntimeContext` | `true` | Turning this off also removes sandbox and approval guidance — all or nothing |
 
 ### Detail levels

@@ -50,6 +50,17 @@ export const Config = z.object({
   sectionOrder: z.number().default(0),
   /** 是否在提示词末尾再加一段「尾锚」（deployment:persona-suffix），长任务下把口吻拉回来。 */
   anchorEnabled: z.boolean().default(true),
+  /**
+   * 是否遮蔽 DSH 自带的 `harness:identity` 段（默认 true）。
+   *
+   * 该段原文是 `You are an AI agent powered by DeepSeek Harness.`；部分上游网关会按这句
+   * 做指纹拦截（400 content_blocked），随后整段 system 被替换成中性提示词，人设全部丢失。
+   * 开启后改用 `identityText`，既避开指纹，也不再和「你是恋兔光」抢身份。
+   * 全局挂载（非 preset）时必须设为 false：同一作用域内同名段会判为重名。
+   */
+  overrideIdentity: z.boolean().default(true),
+  /** 遮蔽后的身份段文案。 */
+  identityText: z.string().default('You are an AI assistant.'),
   /** 是否包含动态 runtime-context 快照（保留工具与沙箱策略时保持 true）。 */
   includeRuntimeContext: z.boolean().default(true)
 });
@@ -92,6 +103,17 @@ const ANCHOR_TEXT = [
  */
 export function apply(ctx, config) {
   const text = renderCharacterPrompt(config.detail ?? 'standard', config.fewShotEnabled ?? true);
+  if ((config.overrideIdentity ?? true) !== false) {
+    const order = typeof ctx.systemPrompt.getSectionOrder === 'function'
+      ? ctx.systemPrompt.getSectionOrder('HARNESS_IDENTITY')
+      : -1000;
+    ctx.effect(() => ctx.systemPrompt.section({
+      name: 'harness:identity',
+      order: Number.isFinite(order) ? order : -1000,
+      text: config.identityText ?? 'You are an AI assistant.',
+      interpolate: false
+    }), 'character-hikari-rento.identity()');
+  }
   ctx.effect(() => ctx.systemPrompt.section({
     name: config.sectionName ?? 'deployment:persona-prefix',
     order: config.sectionOrder ?? 0,

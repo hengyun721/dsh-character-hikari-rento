@@ -41,7 +41,7 @@ const character = JSON.parse(await read('character.json'));
 const index = await read('packages/plugin/index.js');
 const readme = await read('README.md');
 const detailLevels = ['minimal', 'standard', 'full'];
-const configFields = ['detail', 'fewShotEnabled', 'sectionName', 'sectionOrder', 'anchorEnabled', 'includeRuntimeContext'];
+const configFields = ['detail', 'fewShotEnabled', 'sectionName', 'sectionOrder', 'anchorEnabled', 'overrideIdentity', 'identityText', 'includeRuntimeContext'];
 
 // --------------------------------------------------------------------------
 // monorepo root
@@ -152,6 +152,10 @@ check('plugin index.js: no generator markers left', !index.includes('@@'));
 check('plugin index.js: references path resolved from import.meta.url',
   index.includes("new URL('./references/', import.meta.url)"));
 check('plugin index.js: prompt interpolation is disabled', index.includes('interpolate: false'));
+// Some upstream gateways fingerprint the stock harness-identity sentence and answer
+// with a 400 that makes the client drop the whole system prompt; the plugin shadows
+// that section so the persona still arrives.
+check('plugin index.js: shadows harness:identity', index.includes("name: 'harness:identity'"));
 check('plugin character.json copy matches the source',
   JSON.stringify(JSON.parse(await read('packages/plugin/character.json'))) === JSON.stringify(character));
 

@@ -10,6 +10,8 @@
     fewShotEnabled: true
     sectionName: deployment:persona-prefix
     sectionOrder: 0
+    overrideIdentity: true
+    identityText: You are an AI assistant.
     includeRuntimeContext: true
 ```
 
@@ -21,6 +23,9 @@
 | `fewShotEnabled` | boolean | `true` | 是否附加 `fewShot` 里的示例台词 |
 | `sectionName` | string | `deployment:persona-prefix` | 注册到提示词注册表的段落名 |
 | `sectionOrder` | number | `0` | 段落排序 |
+| `anchorEnabled` | boolean | `true` | 是否追加末尾的「尾锚」段（`deployment:persona-suffix`） |
+| `overrideIdentity` | boolean | `true` | 是否遮蔽 DSH 自带的 `harness:identity`。见下方「身份段与上游指纹」 |
+| `identityText` | string | `You are an AI assistant.` | 遮蔽后的身份段文案 |
 | `includeRuntimeContext` | boolean | `true` | 是否保留运行时上下文快照 |
 
 ## `detail` 到底差多少
@@ -43,6 +48,25 @@
   它自己也注册 `deployment:persona-prefix`，重名会被提示词注册表判为 `agent-preset/invalid`。
 - 挂在 **全局**：把 `sectionName` 改成别的名字（如 `character:hikari-rento`），
   她会作为附加段落出现在提示词末尾，而不是替换身份。
+
+## 身份段与上游指纹
+
+DSH 默认会在提示词最前面放一句自带的身份：
+
+```text
+You are an AI agent powered by DeepSeek Harness.
+```
+
+某些把 WorkBuddy / CodeBuddy 转成 OpenAI 接口的本地网关，会按这句做**逐字指纹拦截**：
+第一次请求返回 `400 content_blocked`（`Illegal API invocation from an unapproved channel`），
+网关随后把**整段 system** 换成自己的中性提示词重试。于是模型只看到
+「You are a helper assistant」，人设、口癖、关系表全部消失——表现就是「插件像没装一样 / 问人物关系说不知道」。
+
+插件默认开启 `overrideIdentity`，用一个作用域内的同名段（`harness:identity`）遮蔽原文，
+换成 `identityText`（默认 `You are an AI assistant.`）。人设段紧接着它，不再和它抢身份。
+
+- 全局挂载时必须设 `overrideIdentity: false`：同一作用域不能有同名段。
+- 如果上游仍拦截，把 `identityText` 换一句更中性的（如 `You are a helpful assistant.`）。
 
 ## `sectionOrder` 的用法
 

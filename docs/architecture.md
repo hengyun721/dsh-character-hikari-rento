@@ -22,7 +22,9 @@
          │     └─ 把 {{REFERENCES_DIR}} 换成 references/ 的绝对路径
          │
          └─ ctx.systemPrompt.section({ name, order, text, interpolate: false })
-               └─ name 默认 deployment:persona-prefix → 遮蔽部署级人设
+               ├─ harness:identity（可选，默认开）→ 遮蔽 DSH 自带身份，避开网关指纹
+               ├─ name 默认 deployment:persona-prefix → 遮蔽部署级人设
+               └─ deployment:persona-suffix（尾锚，order 10200）
 ```
 
 ## 为什么补丁要写一整个 preset

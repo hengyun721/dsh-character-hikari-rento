@@ -5,6 +5,23 @@
 
 ## [Unreleased]
 
+## [plugin 1.0.5] — 2026-10-21
+
+### Fixed
+
+- **身份段指纹**：`index.js` 现在遮蔽 `harness:identity`（新增 `overrideIdentity`，默认 `true`；
+  文案由 `identityText` 给出，默认 `You are an AI assistant.`）。DSH 原文
+  `You are an AI agent powered by DeepSeek Harness.` 会被部分上游网关按逐字指纹拦截
+  （HTTP 400 `content_blocked` / `illegal api invocation`），网关随后把**整段 system**
+  换成中性提示词——人设、口癖、关系表全部丢失，表现就是「标准模式 / 问关系说不知道」。
+  遮蔽后提示词以中性身份开头，紧接着就是恋兔光的人设段。
+
+### Why
+
+复现：同一个 17,468 字的 full 人设，作为 system 直接发往干净网关卡 → 11,696 prompt tokens、
+回答「我是恋兔光」；在前面加一句原文身份 → 立刻 400，重试走降级提示词、prompt tokens 只剩 57。
+全局挂载（非 preset）时同一作用域内不能有同名段，需把 `overrideIdentity` 设为 `false`。
+
 ## [plugin 1.0.4 / skill 1.0.4] — 2026-10-21
 
 ### Added

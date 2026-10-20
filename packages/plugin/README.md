@@ -12,8 +12,8 @@
 **安装目标是本目录，不是 monorepo 的仓库根** —— 根 `package.json` 没有 `dsh.bundle`。
 
 - **本地目录**：DSH → **设置 → 插件 → 安装本地 bundle** → 选本目录
-- **tgz**：装 Release 里的 `hikari-rento-1.0.4.tgz`
-- **npm**：已发布，在插件管理器里填 `hikari-rento`（版本 1.0.4）；锁版本就写 `hikari-rento@1.0.4`
+- **tgz**：装 Release 里的 `hikari-rento-1.0.5.tgz`
+- **npm**：已发布，在插件管理器里填 `hikari-rento`（版本 1.0.5）；锁版本就写 `hikari-rento@1.0.5`
 
 装完**重启客户端**，并且**新建一个会话**（不要在旧会话里切 preset）。
 
@@ -28,6 +28,8 @@
     sectionName: deployment:persona-prefix
     sectionOrder: 0
     anchorEnabled: true
+    overrideIdentity: true
+    identityText: You are an AI assistant.
     includeRuntimeContext: true
 ```
 
@@ -41,4 +43,4 @@
 | `references/` | 按需读取的四份参考档（⚠️ 含剧透） |
 | `locale/`、`icon.svg` | 插件卡片的显示名与图标 |
 
-MIT · 版本 1.0.4 · 同人企划，素材归属见 [NOTICE.md](https://github.com/hengyun721/hikari-rento/blob/main/packages/plugin/NOTICE.md)
+MIT · 版本 1.0.5 · 同人企划，素材归属见 [NOTICE.md](https://github.com/hengyun721/hikari-rento/blob/main/packages/plugin/NOTICE.md)
