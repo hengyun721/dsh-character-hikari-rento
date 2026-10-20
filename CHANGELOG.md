@@ -5,6 +5,19 @@
 
 ## [Unreleased]
 
+## [plugin 1.0.4 / skill 1.0.4] — 2026-10-21
+
+### Added
+
+- **尾锚**：`index.js` 在注册 `deployment:persona-prefix` 之后，再注册一段
+  `deployment:persona-suffix`（order 10200）——「你是恋兔光。回答用户时用她的口吻；
+  工具调用与中间进度可以工程语气，但那不是你说话的样子。」
+- 新配置 `anchorEnabled`（默认 `true`）：不想用尾锚可以关掉。
+
+### Why
+
+长上下文里前缀会被稀释，模型在长任务/长问题下回到默认腔。尾锚在每一步组装时都紧贴生成点，
+不改设定、只把身份放到最后一句。
 ## [plugin 1.0.3] — 2026-10-20
 
 ### Fixed
