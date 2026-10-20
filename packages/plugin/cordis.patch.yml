@@ -40,6 +40,7 @@
             config:
               detail: full
               fewShotEnabled: true
+              overrideIdentity: true
           # 以下与官方 standard preset 一一对应
           - id: agent-instructions
             name: '@deepseek-ai/dsh-agent-instructions'
