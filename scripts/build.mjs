@@ -236,7 +236,7 @@ ${character.name}（《这里是，终末停滞委员会。》）的 **DeepSeek 
 
 - **本地目录**：DSH → **设置 → 插件 → 安装本地 bundle** → 选本目录
 - **tgz**：装 Release 里的 \`hikari-rento-${version}.tgz\`
-- **npm**：本版本发布到注册表之后，在插件管理器里填 \`hikari-rento\`（版本 ${version}）
+- **npm**：已发布，在插件管理器里填 \`hikari-rento\`（版本 ${version}）；锁版本就写 \`hikari-rento@${version}\`
 
 装完**重启客户端**，并且**新建一个会话**（不要在旧会话里切 preset）。
 
