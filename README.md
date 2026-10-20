@@ -41,8 +41,8 @@
 
 **tgz**：`npm run pack:plugin` 产出 `dist/hikari-rento-<version>.tgz`，或直接下 Release 附件，装它。
 
-**npm（该版本发布之后）**：在插件管理器里填 `hikari-rento@<version>`；
-先 `npm view hikari-rento version` 确认它真的在注册表里，报 `not-found` 就说明还没发布。
+**npm（已发布）**：插件在 registry 上是 [`hikari-rento@1.0.3`](https://www.npmjs.com/package/hikari-rento)。
+在插件管理器里填 `hikari-rento` 即可，想锁版本就填 `hikari-rento@1.0.3`。
 
 装完**重启客户端**，然后**新建会话**。逐条排障见 [安装文档](docs/install.md)。
 
@@ -52,7 +52,7 @@
 `hikari-rento-skill-<version>.tgz`：
 
 ```bash
-tar -xzf hikari-rento-skill-1.0.0.tgz -C ~/.claude/skills/
+tar -xzf hikari-rento-skill-1.0.2.tgz -C ~/.claude/skills/
 ```
 
 然后新开一个会话，说「恋兔光模式」。

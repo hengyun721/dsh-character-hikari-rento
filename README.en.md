@@ -43,8 +43,8 @@ versions, separate tags, separate releases. Neither is an artifact of the other.
 
 **tgz**: run `npm run pack:plugin` for `dist/hikari-rento-<version>.tgz`, or use the release asset.
 
-**npm (once that version is published)**: enter `hikari-rento@<version>` in the plugin manager.
-Confirm with `npm view hikari-rento version` first; `not-found` means it is not published yet.
+**npm (published)**: the plugin is on the registry as [`hikari-rento@1.0.3`](https://www.npmjs.com/package/hikari-rento).
+Enter `hikari-rento` in the plugin manager, or `hikari-rento@1.0.3` to pin the version.
 
 Restart the client afterwards, then **open a new session**. See [the install guide](docs/install.md).
 
@@ -54,7 +54,7 @@ Copy [`packages/skill/`](packages/skill) into your agent's skills directory, or 
 `hikari-rento-skill-<version>.tgz` from the release:
 
 ```bash
-tar -xzf hikari-rento-skill-1.0.0.tgz -C ~/.claude/skills/
+tar -xzf hikari-rento-skill-1.0.2.tgz -C ~/.claude/skills/
 ```
 
 Then start a fresh session and say "恋兔光模式".

@@ -38,15 +38,15 @@ npm run pack:plugin   # 产出 dist/hikari-rento-<version>.tgz
 在 DSH 里装这个 tgz，或直接用 Release 页的附件 `hikari-rento-<version>.tgz`。两者是同一份构建
 （`files[]` 已经列清楚会打进包里的一切，`tar -tzf` 可以自查）。
 
-## 方式三：从 npm（该版本发布之后）
+## 方式三：从 npm（已发布）
 
-在 DSH 里 **设置 → 插件 → 安装** 填：
+`hikari-rento` 已在 registry 上，当前 **1.0.3**。在 DSH 里 **设置 → 插件 → 安装** 填：
 
 ```
-hikari-rento@<version>
+hikari-rento
 ```
 
-发版后先确认注册表里真的有这个版本，再填：
+想锁版本就填 `hikari-rento@1.0.3`。填之前可以确认一下注册表：
 
 ```bash
 npm view hikari-rento version
