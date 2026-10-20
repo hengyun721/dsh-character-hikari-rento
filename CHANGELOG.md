@@ -76,7 +76,7 @@
 ### Changed
 
 - `scripts/build.mjs` 由「只出 `index.js`」升级为「出 9 个产物」，`npm run check` 逐个比对，
-  插件与 skill 任何一边漂了都会失败。
+  插件与 skill 任何一边跑偏都会失败。
 - README／README.en 增加 Skill 版章节、目录结构与命令更新。
 
 ### Fixed
@@ -99,7 +99,7 @@
 ### Added
 
 - `scripts/build.mjs` + `scripts/index.template.js`：**生成链进了仓库**。`character.json` 是唯一真源，
-  `npm run build` 生成 `index.js`，`npm run check` 检测是否漂移。此前这步靠工作区里的 Python 脚本。
+  `npm run build` 生成两个包的产物，`npm run check` 检测产物与源文件是否一致。此前这步靠工作区里的 Python 脚本。
 - `scripts/self-check.mjs`：50+ 条零依赖结构自检（清单、补丁、九个段落、生成物、参考档、locale、卫生）。
 - `docs/`：安装、配置、架构、测试、发行五份说明。
 - `CONTRIBUTING.md`、`NOTICE.md`（同人身份与素材归属）、`SECURITY.md`、`LICENSE`（MIT）。

@@ -23,7 +23,7 @@ packages/skill/
 
 ```bash
 npm run build       # character.json → 两个包的全部产物
-npm run check       # 逐个比对，任何一边漂了都失败
+npm run check       # 逐个比对，任何一边跑偏都失败
 npm run pack:skill  # 打包成 dist/hikari-rento-skill-<version>.tgz
 ```
 

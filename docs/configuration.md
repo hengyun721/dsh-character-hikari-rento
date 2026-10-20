@@ -78,4 +78,4 @@
 npm run build
 ```
 
-`index.js` 会重新生成；`npm run check` 能验出它有没有漂。
+`index.js` 会重新生成；`npm run check` 能验出它和源文件对不对得上。

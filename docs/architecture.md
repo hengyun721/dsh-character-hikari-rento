@@ -87,7 +87,7 @@ const REFERENCES_DIR = fileURLToPath(new URL('./references/', import.meta.url));
 | `index.js` | DSH Host | 插件本体（生成物） |
 | `character.json` | 维护者 / 生成器 | 角色定义，唯一真源 |
 | `scripts/index.template.js` | 生成器 | 插件外壳（导出、Config、apply） |
-| `scripts/build.mjs` | 维护者 / CI | 生成两个包的产物，`--check` 检测漂移 |
+| `scripts/build.mjs` | 维护者 / CI | 生成两个包的产物，`--check` 检测产物与源是否一致 |
 | `scripts/self-check.mjs` | CI / 维护者 | 零依赖结构自检 |
 | `references/*.md` | 她在运行时 | 按需读取的设定档案 |
 | `人设.md` | 人 | `character.json` 的可读版 |
