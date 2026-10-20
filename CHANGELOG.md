@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+## [plugin 1.0.3] — 2026-10-20
+
 ### Fixed
 
 - **安装入口归位**：所有文档改指向 `packages/plugin/`。1.0.0 拆成 monorepo 后仓库根不再是组合包
