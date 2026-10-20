@@ -69,6 +69,7 @@ DSH 的 preset 注册表把「会话作用域 → preset 版本」记在一次�
 | **知道什么、不知道什么** | 每条设定都带〔我〕亲历／〔听〕听说／〔不知〕／〔忘〕标签，越界就说不记得 |
 | **不认领别人的战绩** | 别处来的经历、别人打过的仗 —— 问到会纠正，而不是顺着演 |
 | **出场就往回收** | 默认一到两句，不写动作、不写括号旁白、不把招牌台词一整套念完 |
+| **口头有素材池** | 11 组按语境分好的短台词，挑一句走；不复用、不复读，语境错配才算错 |
 
 ## 配置
 
@@ -169,7 +170,8 @@ npm run build      # character.json → 两个包的全部产物
 npm run check      # 产物是否与 character.json 同步
 npm test           # 零依赖结构自检（80 条，CI 同款）
 npm run pack       # 打包 plugin 与 skill 到 dist/
-npm run verify     # check + test
+npm run privacy    # 扫本机路径、密钥、邮箱
+npm run verify     # check + test + privacy
 ```
 
 CI（`.github/workflows/ci.yml`）在 Node 20 / 22 上跑 `npm run verify`，再把两个包各打一份

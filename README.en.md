@@ -67,6 +67,7 @@ Switching the preset inside an existing session hits
 | **Knows what she does not know** | Every fact carries a 〔我〕experienced / 〔听〕heard / 〔不知〕unknown / 〔忘〕erased tag |
 | **Refuses borrowed credit** | Experiences from elsewhere and battles others fought — she corrects you instead of playing along |
 | **Short by default** | One or two sentences, no stage directions, no bracketed narration |
+| **Has a spoken-quip pool** | 11 context groups; pick one line and go — no reuse, no repeats, only a context mismatch counts as wrong |
 
 ## Configuration
 
@@ -161,7 +162,8 @@ npm run build      # character.json → every artifact in both packages
 npm run check      # artifacts are in sync with character.json
 npm test           # dependency-free structural checks (80)
 npm run pack       # package both editions into dist/
-npm run verify     # check + test
+npm run privacy    # scan for local paths, tokens, e-mail addresses
+npm run verify     # check + test + privacy
 ```
 
 CI runs `npm run verify` on Node 20 and 22, then uploads one artifact per edition.

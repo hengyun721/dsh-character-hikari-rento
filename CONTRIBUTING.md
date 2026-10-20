@@ -23,11 +23,12 @@
 ## 本地流程
 
 ```bash
-npm run build     # character.json + template → index.js
-npm run verify    # 同步检查 + 语法检查 + 零依赖自检
+npm run build     # character.json → 两个包的全部产物
+npm run verify    # 产物同步 + 80 条结构自检 + 隐私扫描
 ```
 
-三条命令全绿再开 PR。CI 跑的就是 `npm run verify`，不需要装 DSH，也不需要任何依赖。
+**开 PR 前另跑一次 `npm run privacy`**：它扫本机绝对路径、回环地址、令牌、邮箱和内部目录名。
+你自己的机器信息不许进仓库——这条和「不许编 canon」一样是硬规矩。
 
 ## 内容规则
 

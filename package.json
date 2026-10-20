@@ -20,10 +20,11 @@
     "build": "node scripts/build.mjs",
     "check": "node scripts/build.mjs --check",
     "test": "node scripts/self-check.mjs",
-    "verify": "npm run check && npm test",
+    "verify": "npm run check && npm test && npm run privacy",
     "pack:plugin": "node scripts/package-plugin.mjs",
     "pack:skill": "node scripts/package-skill.mjs",
-    "pack": "npm run pack:plugin && npm run pack:skill"
+    "pack": "npm run pack:plugin && npm run pack:skill",
+    "privacy": "node scripts/privacy-check.mjs"
   },
   "workspaces": [
     "packages/*"

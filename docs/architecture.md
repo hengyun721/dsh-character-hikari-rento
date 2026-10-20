@@ -41,15 +41,18 @@ DSH 的 agent preset 是一份**插件清单**。要让「干活能力和官方 
 ## 生成链
 
 ```
-character.json  ──┐
-                  ├─ scripts/build.mjs ─► index.js（内嵌角色定义）
-scripts/index.template.js ─┘
+character.json ──┬─（speechPools 并进 speech 段）──┐
+references/ ─────┼────────────────────────────────┼─ scripts/build.mjs ─┬─► packages/plugin/（index.js、character.json、references/、README）
+scripts/index.template.js ───────────────────────┘                     └─► packages/skill/（SKILL.md、references/、README）
 ```
 
-- **`character.json` 是唯一真源。** 想改人设改这里。
-- **`index.js` 是生成物，不要手改。** 角色定义被内嵌进去，所以运行时不读任何文件、不依赖任何包
-  （除 DSH 自带的 `@deepseek-ai/schemastery` 做 Config 校验）。
-- `npm run check` 会用同样的输入重算一遍并比对，不一致就退出码 1 —— 这防止「人设改了但忘记重新生成」。
+- **`character.json` 与根目录 `references/` 是唯一真源。** 想改人设改这里。
+- **两个包里的产物都是生成的**：插件的 `index.js` 内嵌角色定义（运行时不读文件），
+  skill 的 `SKILL.md` 是全文本；参考档在两边各放一份副本，供各自的相对路径使用。
+- **`speechPools`（口头池）在渲染时并进 `speech` 段**，所以插件与 skill 拿到的是同一份池子；
+  包内的 `character.json` 仍是未合并的原始副本，避免重复合并。
+- `npm run check` 会用同样的输入重算全部产物并逐字节比对，不一致就退出码 1 —— 这防止
+  「人设改了但忘记重新生成」，以及「只更新了插件、漏了 skill」。
 
 模板单独放一个文件的理由：生成物里有反引号、`${}` 和 `\\`，把它们塞进 JS 字符串模板会变成
 一层套一层的转义迷宫；模板文件本身就是纯文本，替换三个 `@@...@@` 占位符即可，还顺带可读。

@@ -38,4 +38,4 @@ npm i hikari-rento
 | `references/` | 按需读取的四份参考档（⚠️ 含剧透） |
 | `locale/`、`icon.svg` | 插件卡片的显示名与图标 |
 
-MIT · 版本 1.0.1 · 同人企划，素材归属见 [NOTICE.md](https://github.com/hengyun721/hikari-rento/blob/main/packages/plugin/NOTICE.md)
+MIT · 版本 1.0.2 · 同人企划，素材归属见 [NOTICE.md](https://github.com/hengyun721/hikari-rento/blob/main/packages/plugin/NOTICE.md)
