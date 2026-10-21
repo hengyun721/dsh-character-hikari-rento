@@ -49,7 +49,7 @@
 - 挂在 **全局**：把 `sectionName` 改成别的名字（如 `character:hikari-rento`），
   她会作为附加段落出现在提示词末尾，而不是替换身份。
 
-## 身份段与上游指纹
+## 身份段与中转风控
 
 DSH 默认会在提示词最前面放一句自带的身份：
 
@@ -57,16 +57,16 @@ DSH 默认会在提示词最前面放一句自带的身份：
 You are an AI agent powered by DeepSeek Harness.
 ```
 
-某些把 WorkBuddy / CodeBuddy 转成 OpenAI 接口的本地网关，会按这句做**逐字指纹拦截**：
-第一次请求返回 `400 content_blocked`（`Illegal API invocation from an unapproved channel`），
-网关随后把**整段 system** 换成自己的中性提示词重试。于是模型只看到
-「You are a helper assistant」，人设、口癖、关系表全部消失——表现就是「插件像没装一样 / 问人物关系说不知道」。
+不少第三方中转 / 代理服务会对 system 里的固定模板句做**逐字风控**（有的按「像不像官方客户端」判断）。
+这是中转的通病，不是 DSH 的问题。麻烦的是它命中后不会只丢那一句：中转会用自家的中性提示词
+替换**整段 system**，并在接下来一段时间里保持这个替换状态。于是模型只看到
+「You are a helpful assistant」，人设、口癖、关系表全部消失——表现就是「插件像没装一样 / 问人物关系说不知道」。
 
 插件默认开启 `overrideIdentity`，用一个作用域内的同名段（`harness:identity`）遮蔽原文，
 换成 `identityText`（默认 `You are an AI assistant.`）。人设段紧接着它，不再和它抢身份。
 
 - 全局挂载时必须设 `overrideIdentity: false`：同一作用域不能有同名段。
-- 如果上游仍拦截，把 `identityText` 换一句更中性的（如 `You are a helpful assistant.`）。
+- 如果中转仍然风控，把 `identityText` 换一句更中性的（如 `You are a helpful assistant.`）。
 
 ## `sectionOrder` 的用法
 

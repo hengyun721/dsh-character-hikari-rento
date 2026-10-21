@@ -104,7 +104,7 @@ DSH 的 preset 注册表把「会话作用域 → preset 版本」记在一次�
 | `sectionName` | `deployment:persona-prefix` | 段落名。默认值会**遮蔽**部署级人设；**只有全局挂载时才需要改**成别的名字 |
 | `sectionOrder` | `0` | 放在提示词最前面；改成 `10150` 变成末尾的附加段落 |
 | `anchorEnabled` | `true` | 提示词末尾再加一段「尾锚」（`deployment:persona-suffix`）：长任务下把口吻拉回来 |
-| `overrideIdentity` | `true` | 遮蔽 DSH 自带的 `harness:identity`。原文 `You are an AI agent powered by DeepSeek Harness.` 会被部分上游网关按指纹拦截（400），随后整段 system 被换成中性提示词，人设全丢。全局挂载必须设 `false` |
+| `overrideIdentity` | `true` | 遮蔽 DSH 自带的 `harness:identity`。一些第三方中转服务会对 system 里的固定模板句做逐字风控，命中后整段 system 会被换成中性提示词，人设全丢——这是中转的通病，不是 DSH 的问题。全局挂载必须设 `false` |
 | `identityText` | `You are an AI assistant.` | 遮蔽后的身份段文案 |
 | `includeRuntimeContext` | `true` | 关掉会连沙箱策略、审批策略一起移除（全有全无） |
 
